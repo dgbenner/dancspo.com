@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dan Benner — Product Owner &amp; AI Strategist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Libre+Caslon+Display&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CSS CUSTOM PROPERTIES
+   ============================================ */
+:root {
+  --bg: #1a1a1a;
+  --cream: #ede6d8;
+  --white: #f5f5f0;
+  --red: #ff5b4a;
+  --surface: #242424;
+  --surface-2: #2e2e2e;
+  --serif: 'DM Serif Display', serif;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --border: rgba(232, 224, 208, 0.3);
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   BACKGROUND GRAIN (SVG feTurbulence)
+   ============================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* ============================================
+   BACKGROUND GRADIENT PULSE
+   ============================================ */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 600px 400px at 0% 50%, rgba(232, 224, 208, 0.06), transparent 70%);
+  mix-blend-mode: overlay;
+  animation: gradientPulse 25s ease-in-out infinite alternate;
+}
+@keyframes gradientPulse {
+  0% { background-position: 0% 30%; opacity: 0.6; }
+  50% { background-position: 100% 60%; opacity: 1; }
+  100% { background-position: 0% 70%; opacity: 0.6; }
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+section { position: relative; z-index: 1; }
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--bg);
+  padding: 12px 0;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.nav-logo-domain {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--red);
+  letter-spacing: 0.5px;
+}
+.nav-logo-name {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 3.5px;
+  font-variant: small-caps;
+  opacity: 0.7;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--cream);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  position: relative;
+  transition: color 0.2s;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--red);
+  transition: width 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after { width: 100%; }
+
+/* Work dropdown */
+.nav-dropdown { position: relative; }
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 0;
+  min-width: 220px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown-menu:hover {
+  opacity: 1;
+  visibility: visible;
+}
+.nav-dropdown-menu a {
+  display: block;
+  padding: 8px 20px;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  color: var(--cream);
+  white-space: nowrap;
+}
+.nav-dropdown-menu a::after { display: none; }
+.nav-dropdown-menu a:hover {
+  background: var(--surface-2);
+  color: var(--white);
+}
+
+/* Hamburger */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+  background: none;
+  border: none;
+}
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--cream);
+  transition: transform 0.3s, opacity 0.3s;
+}
+.nav-hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.active span:nth-child(2) { opacity: 0; }
+.nav-hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile nav */
+.nav-mobile {
+  display: none;
+  position: fixed;
+  top: 60px; left: 0; right: 0; bottom: 0;
+  background: var(--bg);
+  z-index: 99;
+  padding: 32px 24px;
+  flex-direction: column;
+  gap: 24px;
+}
+.nav-mobile.open { display: flex; }
+.nav-mobile a {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--cream);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.nav-mobile a:hover { color: var(--red); }
+
+/* ============================================
+   HERO
+   ============================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 80px;
+  position: relative;
+  overflow: visible;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 48px;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+.hero-label {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 24px;
+}
+.hero-headline {
+  font-family: 'Libre Caslon Display', var(--serif);
+  font-size: clamp(43px, 6vw, 78px);
+  color: var(--white);
+  line-height: 1.1;
+  margin-top: 12px;
+  margin-bottom: 32px;
+  text-shadow: 0 0 40px rgba(26, 26, 26, 1), 0 0 80px rgba(26, 26, 26, 1), 0 0 120px rgba(26, 26, 26, 1);
+}
+.hero-headline span { display: block; }
+
+.hero-body {
+  font-size: 16px;
+  color: var(--cream);
+  line-height: 1.7;
+  max-width: 540px;
+  margin-bottom: 32px;
+}
+.hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 28px;
+  border: 1px solid var(--cream);
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--white);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  letter-spacing: 0.5px;
+}
+.btn:hover {
+  background: var(--cream);
+  color: var(--bg);
+}
+.hero-canvas-wrap {
+  position: absolute;
+  top: -25%;
+  right: -60px;
+  width: 90%;
+  height: 130%;
+  z-index: 1;
+  pointer-events: none;
+}
+#heroCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ============================================
+   LOGO CAROUSEL
+   ============================================ */
+.logo-carousel {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+.logo-track {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  width: max-content;
+  animation: scrollLogos 60s linear infinite;
+}
+.logo-track img {
+  height: 47px;
+  width: auto;
+  opacity: 0.7;
+  filter: grayscale(1) brightness(2);
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+.logo-track img:hover {
+  opacity: 1;
+}
+/* Fade edges for seamless feel */
+.logo-carousel::before,
+.logo-carousel::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+.logo-carousel::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg), transparent);
+}
+.logo-carousel::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg), transparent);
+}
+@keyframes scrollLogos {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ============================================
+   PROJECTS
+   ============================================ */
+.projects { padding: 80px 0; }
+.project-block {
+  margin-bottom: 64px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--border);
+}
+.project-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.project-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Style tile */
+.style-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.style-tile-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.style-tile-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+.pill {
+  background: rgba(0, 0, 0, 0.65);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--white);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Project content */
+.project-role {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 16px;
+}
+.project-desc {
+  font-size: 15px;
+  color: var(--cream);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* Segmented controller */
+.segmented-controller {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 24px;
+}
+.seg-btn {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 10px 0;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--cream);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+/* First button: rounded left corners only */
+.seg-btn:first-child {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  border-right: none;
+}
+/* Middle button: no rounded corners */
+.seg-btn:nth-child(2) {
+  border-radius: 0;
+}
+/* Last button: rounded right corners only */
+.seg-btn:last-child {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border-left: none;
+}
+.seg-btn:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--white);
+}
+.seg-btn.active {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--white);
+}
+
+/* Segmented content panels */
+.seg-panel {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+.seg-panel.active {
+  display: block;
+}
+.seg-panel .narrative-section { margin-bottom: 20px; }
+.seg-panel .narrative-section:last-child { margin-bottom: 0; }
+.seg-panel .narrative-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.seg-panel .narrative-text {
+  font-size: 15px;
+  color: var(--cream);
+  line-height: 1.7;
+}
+.seg-panel .prd-table { width: 100%; margin-bottom: 20px; }
+.seg-panel .prd-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.seg-panel .prd-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--cream);
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.seg-panel .prd-value {
+  font-size: 14px;
+  color: var(--white);
+}
+.seg-panel .prd-section-title {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 20px 0 8px;
+}
+.seg-panel .overview-text {
+  font-size: 15px;
+  color: var(--cream);
+  line-height: 1.7;
+}
+
+.project-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.meta-cell {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+}
+.meta-cell-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  opacity: 0.7;
+}
+
+/* ============================================
+   ENDORSEMENTS CAROUSEL
+   ============================================ */
+.endorsements {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+.endorsements-heading {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 28px;
+  opacity: 0.6;
+}
+.endorsement-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: scrollEndorsements 120s linear infinite;
+}
+.endorsement-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  width: 340px;
+  flex-shrink: 0;
+}
+.endorsement-quote {
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--white);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.endorsement-attribution {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+@keyframes scrollEndorsements {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ============================================
+   ABOUT SECTION
+   ============================================ */
+.about {
+  padding: 120px 0 80px;
+  position: relative;
+  z-index: 1;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 48px;
+  align-items: start;
+}
+.about-label {
+  font-family: 'Libre Caslon Display', var(--serif);
+  font-size: clamp(80px, 10vw, 120px);
+  color: var(--cream);
+  opacity: 0.08;
+  line-height: 1;
+  position: sticky;
+  top: 100px;
+}
+.about-name {
+  font-family: 'Libre Caslon Display', var(--serif);
+  font-size: 40px;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.about-role {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 28px;
+}
+.about-text {
+  font-size: 16px;
+  color: var(--cream);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.about-contact {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+.about-contact a {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cream);
+  text-decoration: none;
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  transition: background 0.2s, color 0.2s;
+}
+.about-contact a:hover {
+  background: var(--cream);
+  color: var(--bg);
+}
+.about-info {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--cream);
+  margin-top: 24px;
+  line-height: 1.8;
+  opacity: 0.8;
+}
+.about-seals {
+  display: flex;
+  gap: 20px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+}
+.about-seals a {
+  display: block;
+  transition: opacity 0.2s;
+}
+.about-seals a:hover {
+  opacity: 0.8;
+}
+.about-seals img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: var(--radius);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .hero-canvas-wrap { opacity: 0.4; width: 100%; right: 0; height: 100%; top: 0; }
+  .project-grid { grid-template-columns: 1fr; }
+  .project-meta-grid { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; }
+  .about-label {
+    position: relative;
+    top: auto;
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+  .endorsement-card { width: 280px; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     NAVIGATION
+     ============================================ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-domain">danpo.com</span>
+      <span class="nav-logo-name">Dan Benner</span>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-dropdown">
+        <a href="#projects">Work</a>
+        <div class="nav-dropdown-menu">
+          <a href="#best-buy">Best Buy</a>
+          <a href="#chs">CHS</a>
+          <a href="#droneup">DroneUp</a>
+          <a href="#ey">Ernst &amp; Young</a>
+          <a href="#intuitive">Intuitive Surgical</a>
+          <a href="#kudo">KUDO</a>
+          <a href="#nagios">Nagios</a>
+          <a href="#stealth">Stealth AI</a>
+          <a href="#vetavize">Vetavize</a>
+        </div>
+      </li>
+      <li><a href="#about">About</a></li>
+      <li><a href="https://drive.google.com/file/d/1BBcFm7eDvmtbxpdUEBEdTd5R9DCMj9oq/view?usp=drive_link" target="_blank" rel="noopener">Resume</a></li>
+    </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile nav -->
+<div class="nav-mobile" id="mobileNav">
+  <a href="#best-buy" class="mobile-nav-link">Best Buy</a>
+  <a href="#chs" class="mobile-nav-link">CHS</a>
+  <a href="#droneup" class="mobile-nav-link">DroneUp</a>
+  <a href="#ey" class="mobile-nav-link">Ernst &amp; Young</a>
+  <a href="#intuitive" class="mobile-nav-link">Intuitive Surgical</a>
+  <a href="#kudo" class="mobile-nav-link">KUDO</a>
+  <a href="#nagios" class="mobile-nav-link">Nagios</a>
+  <a href="#stealth" class="mobile-nav-link">Stealth AI</a>
+  <a href="#vetavize" class="mobile-nav-link">Vetavize</a>
+  <a href="#about" class="mobile-nav-link">About</a>
+</div>
+
+<!-- ============================================
+     HERO
+     ============================================ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-label">Product Owner · AI Strategist</div>
+        <h1 class="hero-headline">
+          <span>I find what's broken,</span>
+          <span>name what's hidden,</span>
+          <span>show what's possible.</span>
+        </h1>
+        <p class="hero-body">Product Owner and AI strategist with a track record across healthcare AI, drone logistics, enterprise CRM, and veteran services. Eight years building products where the diagnosis was wrong and the roadmap needed to change.</p>
+        <div class="hero-buttons">
+          <a href="#projects" class="btn">View Work</a>
+          <a href="https://drive.google.com/file/d/1BBcFm7eDvmtbxpdUEBEdTd5R9DCMj9oq/view?usp=drive_link" target="_blank" rel="noopener" class="btn">Resume</a>
+        </div>
+      </div>
+      <div class="hero-canvas-wrap">
+        <canvas id="heroCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     LOGO CAROUSEL
+     ============================================ -->
+<div class="logo-carousel">
+  <div class="logo-track">
+    <img src="images/logos/bestbuy.svg" alt="Best Buy">
+    <img src="images/logos/bp.svg" alt="bp">
+    <img src="images/logos/chs.svg" alt="CHS">
+    <img src="images/logos/ey.svg" alt="EY">
+    <img src="images/logos/intuitivesurgical.svg" alt="Intuitive Surgical">
+    <img src="images/logos/kudo.svg" alt="KUDO">
+    <img src="images/logos/pointclickcare.svg" alt="PointClickCare">
+    <img src="images/logos/walmart.svg" alt="Walmart">
+    <img src="images/logos/coach.svg" alt="Coach">
+    <img src="images/logos/intel.svg" alt="Intel">
+    <img src="images/logos/microsoft.svg" alt="Microsoft">
+    <img src="images/logos/cocacola.svg" alt="Coca-Cola">
+    <img src="images/logos/hewlett packard.svg" alt="Hewlett Packard">
+    <img src="images/logos/3m.svg" alt="3M">
+    <img src="images/logos/comcast.svg" alt="Comcast">
+    <img src="images/logos/abbott.svg" alt="Abbott">
+    <img src="images/logos/kaiser.svg" alt="Kaiser">
+    <img src="images/logos/metlife.svg" alt="MetLife">
+    <!-- Duplicate for seamless loop -->
+    <img src="images/logos/bestbuy.svg" alt="Best Buy">
+    <img src="images/logos/bp.svg" alt="bp">
+    <img src="images/logos/chs.svg" alt="CHS">
+    <img src="images/logos/ey.svg" alt="EY">
+    <img src="images/logos/intuitivesurgical.svg" alt="Intuitive Surgical">
+    <img src="images/logos/kudo.svg" alt="KUDO">
+    <img src="images/logos/pointclickcare.svg" alt="PointClickCare">
+    <img src="images/logos/walmart.svg" alt="Walmart">
+    <img src="images/logos/coach.svg" alt="Coach">
+    <img src="images/logos/intel.svg" alt="Intel">
+    <img src="images/logos/microsoft.svg" alt="Microsoft">
+    <img src="images/logos/cocacola.svg" alt="Coca-Cola">
+    <img src="images/logos/hewlett packard.svg" alt="Hewlett Packard">
+    <img src="images/logos/3m.svg" alt="3M">
+    <img src="images/logos/comcast.svg" alt="Comcast">
+    <img src="images/logos/abbott.svg" alt="Abbott">
+    <img src="images/logos/kaiser.svg" alt="Kaiser">
+    <img src="images/logos/metlife.svg" alt="MetLife">
+  </div>
+</div>
+
+<!-- ============================================
+     PROJECTS
+     ============================================ -->
+<section class="projects" id="projects">
+  <div class="container">
+
+    <!-- BEST BUY -->
+    <div class="project-block" id="best-buy">
+      <div class="project-grid">
+        <div class="style-tile">
+          <img src="images/bestbuy.png" alt="Best Buy key slide" class="style-tile-img">
+          <div class="style-tile-meta">
+            <span class="pill">Product Designer + AI Strategist</span>
+            <span class="pill">2017–2019</span>
+          </div>
+        </div>
+        <div class="project-content">
+          <div class="project-role">Product Designer + AI Strategist</div>
+          <p class="project-desc">Launched an AI-assisted self-diagnosis microsite and designed across 13 service applications — triage, scheduling, vendor relations, estimation tools, and smart home integrations. First AI product work in the portfolio.</p>
+          <div class="segmented-controller">
+            <button class="seg-btn active" data-seg="narrative" data-project="bestbuy">What Was Broken</button>
+            <button class="seg-btn" data-seg="overview" data-project="bestbuy">Overview</button>
+            <button class="seg-btn" data-seg="prd" data-project="bestbuy">PRD</button>
+          </div>
+          <div class="seg-panel active" id="seg-narrative-bestbuy">
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">Customers arriving at service with no clear self-triage path, creating friction and misrouted cases.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">The diagnostic problem wasn't UX — it was that the service model assumed human intake would scale. It wouldn't.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">An AI-assisted front end that reduced misrouting and created a feedback loop for service quality.</p></div>
+          </div>
+          <div class="seg-panel" id="seg-overview-bestbuy">
+            <p class="overview-text">[Overview content to be added]</p>
+          </div>
+          <div class="seg-panel" id="seg-prd-bestbuy">
+            <div class="prd-table">
+              <div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">[placeholder]</div></div>
+              <div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">[placeholder]</div></div>
+              <div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">[placeholder]</div></div>
+              <div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">[placeholder]</div></div>
+              <div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">[placeholder]</div></div>
+            </div>
+            <div class="prd-section-title">Problem Definition</div>
+            <div class="prd-table">
+              <div class="prd-row"><div class="prd-label">Objective</div><div class="prd-value">[placeholder]</div></div>
+              <div class="prd-row"><div class="prd-label">Success Metric</div><div class="prd-value">[placeholder]</div></div>
+              <div class="prd-row"><div class="prd-label">Stakeholders</div><div class="prd-value">[placeholder]</div></div>
+            </div>
+            <div class="prd-section-title">User Stories</div>
+            <p class="overview-text">[placeholder]</p>
+            <div class="prd-section-title">Requirements</div>
+            <p class="overview-text">[placeholder]</p>
+            <div class="prd-section-title">Out of Scope</div>
+            <p class="overview-text">[placeholder]</p>
+          </div>
+          <!-- <div class="project-meta-grid">
+            <div class="meta-cell"><div class="meta-cell-label">Process</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Outcomes</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Tools</div></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- CHS -->
+    <div class="project-block" id="chs">
+      <div class="project-grid">
+        <div class="style-tile">
+          <img src="images/chs.png" alt="CHS key slide" class="style-tile-img">
+          <div class="style-tile-meta">
+            <span class="pill">Product Strategist</span>
+            <span class="pill">2020–Present</span>
+          </div>
+        </div>
+        <div class="project-content">
+          <div class="project-role">Product Strategist</div>
+          <p class="project-desc">Led discovery and strategic roadmap for an 11,000-employee global intranet at a Fortune 100 agriculture and fuel company. The content organization wasn't the problem — access and relevance were.</p>
+          <div class="segmented-controller">
+            <button class="seg-btn active" data-seg="narrative" data-project="chs">What Was Broken</button>
+            <button class="seg-btn" data-seg="overview" data-project="chs">Overview</button>
+            <button class="seg-btn" data-seg="prd" data-project="chs">PRD</button>
+          </div>
+          <div class="seg-panel active" id="seg-narrative-chs">
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">An intranet with poor adoption across a globally distributed workforce.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">Stakeholders believed content organization was the issue. The actual problem was that employees couldn't find content relevant to their role and location — a personalization and access problem, not a taxonomy problem.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">A roadmap reframing the intranet as a role-aware surface, not a document repository.</p></div>
+          </div>
+          <div class="seg-panel" id="seg-overview-chs"><p class="overview-text">[Overview content to be added]</p></div>
+          <div class="seg-panel" id="seg-prd-chs">
+            <div class="prd-table"><div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">Problem Definition</div><div class="prd-table"><div class="prd-row"><div class="prd-label">Objective</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Success Metric</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Stakeholders</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">User Stories</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Requirements</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Out of Scope</div><p class="overview-text">[placeholder]</p>
+          </div>
+          <!-- <div class="project-meta-grid">
+            <div class="meta-cell"><div class="meta-cell-label">Process</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Outcomes</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Tools</div></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- DRONEUP -->
+    <div class="project-block" id="droneup">
+      <div class="project-grid">
+        <div class="style-tile">
+          <img src="images/droneup.png" alt="DroneUp key slide" class="style-tile-img">
+          <div class="style-tile-meta">
+            <span class="pill">Senior Growth UX Designer</span>
+            <span class="pill">2022–2023</span>
+          </div>
+        </div>
+        <div class="project-content">
+          <div class="project-role">Senior Growth UX Designer</div>
+          <p class="project-desc">Built research operations from scratch, identified critical purchase blockers, and stepped into a de facto product ownership role to keep the vendor portal alive after leadership departure — with Fortune 1 retailer partnership at stake.</p>
+          <div class="segmented-controller">
+            <button class="seg-btn active" data-seg="narrative" data-project="droneup">What Was Broken</button>
+            <button class="seg-btn" data-seg="overview" data-project="droneup">Overview</button>
+            <button class="seg-btn" data-seg="prd" data-project="droneup">PRD</button>
+          </div>
+          <div class="seg-panel active" id="seg-narrative-droneup">
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">No feedback loop between customers and product. 60–70% of behavioral data was skewed by internal employee testing, making every product decision unreliable.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">The vendor portal had no internal champion after leadership left. Without someone holding the product vision, the 300–500 daily mission target with Walmart was at risk.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">Establishing research ops as infrastructure, not a one-time activity. Taking de facto ownership of the vendor portal — building the case, presenting to C-suite, reversing the deprioritization decision.</p></div>
+          </div>
+          <div class="seg-panel" id="seg-overview-droneup"><p class="overview-text">[Overview content to be added]</p></div>
+          <div class="seg-panel" id="seg-prd-droneup">
+            <div class="prd-table"><div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">Problem Definition</div><div class="prd-table"><div class="prd-row"><div class="prd-label">Objective</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Success Metric</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Stakeholders</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">User Stories</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Requirements</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Out of Scope</div><p class="overview-text">[placeholder]</p>
+          </div>
+          <!-- <div class="project-meta-grid">
+            <div class="meta-cell"><div class="meta-cell-label">Process</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Outcomes</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Tools</div></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- EY -->
+    <div class="project-block" id="ey">
+      <div class="project-grid">
+        <div class="style-tile">
+          <img src="images/ey.png" alt="Ernst & Young key slide" class="style-tile-img">
+          <div class="style-tile-meta">
+            <span class="pill">Product Strategist</span>
+            <span class="pill">2021–2022</span>
+          </div>
+        </div>
+        <div class="project-content">
+          <div class="project-role">Product Strategist</div>
+          <p class="project-desc">Hired to fix a failing CRM. 40+ interview hours and 1,200+ data points later, the finding was that the product wasn't the problem — the sales culture and data hygiene were. Recommended a pivot that no prior agency had surfaced.</p>
+          <div class="segmented-controller">
+            <button class="seg-btn active" data-seg="narrative" data-project="ey">What Was Broken</button>
+            <button class="seg-btn" data-seg="overview" data-project="ey">Overview</button>
+            <button class="seg-btn" data-seg="prd" data-project="ey">PRD</button>
+          </div>
+          <div class="seg-panel active" id="seg-narrative-ey">
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">A 20-year-old CRM with collapsing adoption. Leadership believed the product needed new features.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">Adoption wasn't failing because of missing functionality. It was failing because of data quality and a sales culture that had never been designed around the tool.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">Deprioritize the feature roadmap. Invest in culture and data integrity first. Lower cost, higher impact, faster path to adoption.</p></div>
+          </div>
+          <div class="seg-panel" id="seg-overview-ey"><p class="overview-text">[Overview content to be added]</p></div>
+          <div class="seg-panel" id="seg-prd-ey">
+            <div class="prd-table"><div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">Problem Definition</div><div class="prd-table"><div class="prd-row"><div class="prd-label">Objective</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Success Metric</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Stakeholders</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">User Stories</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Requirements</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Out of Scope</div><p class="overview-text">[placeholder]</p>
+          </div>
+          <!-- <div class="project-meta-grid">
+            <div class="meta-cell"><div class="meta-cell-label">Process</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Outcomes</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Tools</div></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- INTUITIVE SURGICAL -->
+    <div class="project-block" id="intuitive">
+      <div class="project-grid">
+        <div class="style-tile">
+          <img src="images/intuitive.png" alt="Intuitive Surgical key slide" class="style-tile-img">
+          <div class="style-tile-meta">
+            <span class="pill">UX Strategy Consultant</span>
+            <span class="pill">2022</span>
+          </div>
+        </div>
+        <div class="project-content">
+          <div class="project-role">UX Strategy Consultant</div>
+          <p class="project-desc">Led product-level discovery for the Da Vinci robotic surgery training platform. Found that surgeons weren't disengaged — they were routing around the product. Delivered a two-tier roadmap separating quick wins from strategic investment.</p>
+          <div class="segmented-controller">
+            <button class="seg-btn active" data-seg="narrative" data-project="intuitive">What Was Broken</button>
+            <button class="seg-btn" data-seg="overview" data-project="intuitive">Overview</button>
+            <button class="seg-btn" data-seg="prd" data-project="intuitive">PRD</button>
+          </div>
+          <div class="seg-panel active" id="seg-narrative-intuitive">
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">Surgeons not using the official training platform. Engagement metrics were low and declining.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">Surgeons weren't disengaged — they had found workarounds, building informal communities on Facebook and YouTube. The product had been built without them.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">A two-tier roadmap. Quick wins to close the gap between the platform and the workarounds. Strategic investments to rebuild surgeon trust over time.</p></div>
+          </div>
+          <div class="seg-panel" id="seg-overview-intuitive"><p class="overview-text">[Overview content to be added]</p></div>
+          <div class="seg-panel" id="seg-prd-intuitive">
+            <div class="prd-table"><div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">Problem Definition</div><div class="prd-table"><div class="prd-row"><div class="prd-label">Objective</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Success Metric</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Stakeholders</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">User Stories</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Requirements</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Out of Scope</div><p class="overview-text">[placeholder]</p>
+          </div>
+          <!-- <div class="project-meta-grid">
+            <div class="meta-cell"><div class="meta-cell-label">Process</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Outcomes</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Tools</div></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- KUDO -->
+    <div class="project-block" id="kudo">
+      <div class="project-grid">
+        <div class="style-tile">
+          <img src="images/kudo.png" alt="KUDO key slide" class="style-tile-img">
+          <div class="style-tile-meta">
+            <span class="pill">User Experience Consultant</span>
+            <span class="pill">2021</span>
+          </div>
+        </div>
+        <div class="project-content">
+          <div class="project-role">User Experience Consultant</div>
+          <p class="project-desc">Directed usability research framework for a Series A multilingual interpretation platform used by the European Parliament, Interpol, NATO, and the United Nations.</p>
+          <div class="segmented-controller">
+            <button class="seg-btn active" data-seg="narrative" data-project="kudo">What Was Broken</button>
+            <button class="seg-btn" data-seg="overview" data-project="kudo">Overview</button>
+            <button class="seg-btn" data-seg="prd" data-project="kudo">PRD</button>
+          </div>
+          <div class="seg-panel active" id="seg-narrative-kudo">
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">A platform operating at institutional scale with no formal usability research infrastructure.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">The complexity wasn't the product — it was the diversity of user contexts across institutions, languages, and technical environments that no single research pass had mapped.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">A research framework that could operate across that diversity and produce findings the product team could act on.</p></div>
+          </div>
+          <div class="seg-panel" id="seg-overview-kudo"><p class="overview-text">[Overview content to be added]</p></div>
+          <div class="seg-panel" id="seg-prd-kudo">
+            <div class="prd-table"><div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">Problem Definition</div><div class="prd-table"><div class="prd-row"><div class="prd-label">Objective</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Success Metric</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Stakeholders</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">User Stories</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Requirements</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Out of Scope</div><p class="overview-text">[placeholder]</p>
+          </div>
+          <!-- <div class="project-meta-grid">
+            <div class="meta-cell"><div class="meta-cell-label">Process</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Outcomes</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Tools</div></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- NAGIOS -->
+    <div class="project-block" id="nagios">
+      <div class="project-grid">
+        <div class="style-tile">
+          <img src="images/nagios.png" alt="Nagios key slide" class="style-tile-img">
+          <div class="style-tile-meta">
+            <span class="pill">Product Designer</span>
+            <span class="pill">2016–2017</span>
+          </div>
+        </div>
+        <div class="project-content">
+          <div class="project-role">Product Designer</div>
+          <p class="project-desc">Redesigned the monitoring and alerting interface for Nagios, an enterprise IT infrastructure monitoring platform used by thousands of organizations worldwide.</p>
+          <div class="segmented-controller">
+            <button class="seg-btn active" data-seg="narrative" data-project="nagios">What Was Broken</button>
+            <button class="seg-btn" data-seg="overview" data-project="nagios">Overview</button>
+            <button class="seg-btn" data-seg="prd" data-project="nagios">PRD</button>
+          </div>
+          <div class="seg-panel active" id="seg-narrative-nagios">
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">[Narrative content to be added]</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">[Narrative content to be added]</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">[Narrative content to be added]</p></div>
+          </div>
+          <div class="seg-panel" id="seg-overview-nagios"><p class="overview-text">[Overview content to be added]</p></div>
+          <div class="seg-panel" id="seg-prd-nagios">
+            <div class="prd-table"><div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">Problem Definition</div><div class="prd-table"><div class="prd-row"><div class="prd-label">Objective</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Success Metric</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Stakeholders</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">User Stories</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Requirements</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Out of Scope</div><p class="overview-text">[placeholder]</p>
+          </div>
+          <!-- <div class="project-meta-grid">
+            <div class="meta-cell"><div class="meta-cell-label">Process</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Outcomes</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Tools</div></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- STEALTH AI -->
+    <div class="project-block" id="stealth">
+      <div class="project-grid">
+        <div class="style-tile">
+          <!-- Image placeholder — add stealth.png when available -->
+          <div style="height:180px;display:flex;align-items:center;justify-content:center;color:var(--cream);opacity:0.3;font-family:var(--serif);font-size:48px;">S</div>
+          <div class="style-tile-meta">
+            <span class="pill">Product Specialist</span>
+            <span class="pill">2024–2026</span>
+          </div>
+        </div>
+        <div class="project-content">
+          <div class="project-role">Product Specialist</div>
+          <p class="project-desc">Designed adaptive progression and conversational intelligence systems for a health AI startup. Addressed user drop-off by scaffolding engagement from any starting awareness level — no psychological readiness required upfront.</p>
+          <div class="segmented-controller">
+            <button class="seg-btn active" data-seg="narrative" data-project="stealth">What Was Broken</button>
+            <button class="seg-btn" data-seg="overview" data-project="stealth">Overview</button>
+            <button class="seg-btn" data-seg="prd" data-project="stealth">PRD</button>
+          </div>
+          <div class="seg-panel active" id="seg-narrative-stealth">
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">User drop-off at the front door. The product assumed users arrived with self-awareness and readiness to engage. Most didn't.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">The barrier wasn't motivation — it was the product's implicit requirement that users already understand themselves before the tool could help them.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">A scaffolded progression model that meets users where they are and builds complexity gradually, removing readiness as a prerequisite.</p></div>
+          </div>
+          <div class="seg-panel" id="seg-overview-stealth"><p class="overview-text">[Overview content to be added]</p></div>
+          <div class="seg-panel" id="seg-prd-stealth">
+            <div class="prd-table"><div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">Problem Definition</div><div class="prd-table"><div class="prd-row"><div class="prd-label">Objective</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Success Metric</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Stakeholders</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">User Stories</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Requirements</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Out of Scope</div><p class="overview-text">[placeholder]</p>
+          </div>
+          <!-- <div class="project-meta-grid">
+            <div class="meta-cell"><div class="meta-cell-label">Process</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Outcomes</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Tools</div></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- VETAVIZE -->
+    <div class="project-block" id="vetavize">
+      <div class="project-grid">
+        <div class="style-tile">
+          <!-- Image placeholder — add vetavize.png when available -->
+          <div style="height:180px;display:flex;align-items:center;justify-content:center;color:var(--cream);opacity:0.3;font-family:var(--serif);font-size:48px;">V</div>
+          <div class="style-tile-meta">
+            <span class="pill">Product Strategist</span>
+            <span class="pill">2020–Present</span>
+          </div>
+        </div>
+        <div class="project-content">
+          <div class="project-role">Product Strategist</div>
+          <p class="project-desc">Architected a feedback-driven AI system for veterans benefits claims. Outcome tracking feeds model intelligence on successful VA review strategies, creating a continuously improving recommendation engine.</p>
+          <div class="segmented-controller">
+            <button class="seg-btn active" data-seg="narrative" data-project="vetavize">What Was Broken</button>
+            <button class="seg-btn" data-seg="overview" data-project="vetavize">Overview</button>
+            <button class="seg-btn" data-seg="prd" data-project="vetavize">PRD</button>
+          </div>
+          <div class="seg-panel active" id="seg-narrative-vetavize">
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">Veterans navigating a complex, high-stakes claims process with no consistent guidance on what strategies produce favorable outcomes.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">The problem wasn't information access — it was that no system was learning from outcomes to improve future recommendations.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">A recommendation engine that compounds intelligence over time — each resolved claim improving the next.</p></div>
+          </div>
+          <div class="seg-panel" id="seg-overview-vetavize"><p class="overview-text">[Overview content to be added]</p></div>
+          <div class="seg-panel" id="seg-prd-vetavize">
+            <div class="prd-table"><div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">Problem Definition</div><div class="prd-table"><div class="prd-row"><div class="prd-label">Objective</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Success Metric</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Stakeholders</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">User Stories</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Requirements</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Out of Scope</div><p class="overview-text">[placeholder]</p>
+          </div>
+          <!-- <div class="project-meta-grid">
+            <div class="meta-cell"><div class="meta-cell-label">Process</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Outcomes</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Tools</div></div>
+          </div> -->
+        </div>
+      </div>
+    </div>  </div>
+</section>
+
+<!-- ============================================
+     ENDORSEMENTS CAROUSEL
+     ============================================ -->
+<section class="endorsements">
+  <div class="endorsements-heading">Endorsements</div>
+  <div class="endorsement-track">
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's grasp of web development and trends has really allowed us to push the envelope."</p><div class="endorsement-attribution">Zach Kahn · CTO + Product Manager · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Let me know if you ever need a reference... or if you're interviewing, I'll go with you to the interview."</p><div class="endorsement-attribution">Rich Hultman · Senior Innovation Designer and UX Strategist · IBM Watson + Best Buy Alum</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is one of the most detailed designers I've seen. He is instrumental to our product."</p><div class="endorsement-attribution">Robert Plummer · ML Engineer · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is always thinking outside the box and bringing fresh, creative ideas."</p><div class="endorsement-attribution">Clive Vang · UI/UX Designer · Truist</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"We had 'Microsoft', and Dan gave us 'Apple'."</p><div class="endorsement-attribution">Karen Larsen · Project Manager · Larsen Solutions</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"I always find Dan easy to bounce new ideas off of in order to find the best solution."</p><div class="endorsement-attribution">Eric Lee · Software Engineer · Hulu</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan puts his heart and soul into his work."</p><div class="endorsement-attribution">Scott Brandon · CEO + Owner · The Brandon Agency</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"I sing Dan's praises as often and loudly as I can."</p><div class="endorsement-attribution">Brad Elhert · Director of Business Development · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's really good at UX. I mean really good."</p><div class="endorsement-attribution">Chris Cortilet · Co-Founder · Azul 7</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Do yourself a favor — hire Dan, and you can thank me later!"</p><div class="endorsement-attribution">Steve Brophy · Creative Director · Davis + Co</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Top Tier Design. Top Tier Human."</p><div class="endorsement-attribution">Ben Bischoff · ML Engineer · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan knocks it out of the park. He's flat-out terrific."</p><div class="endorsement-attribution">Hugh MacNiven · Director of Learning Strategy · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan has done absolutely the best analysis for our product!"</p><div class="endorsement-attribution">Claudio Fantinuoli, PhD · Head of Innovation · KUDO Inc</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"90% of where our platform is today is due to Dan's vision."</p><div class="endorsement-attribution">Zach Kahn · CTO + Product Manager · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"I would work with Dan again in a heartbeat."</p><div class="endorsement-attribution">Eric Lee · Software Engineer · Hulu</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is such a kind and authentic person."</p><div class="endorsement-attribution">Linsey Krantz Hsieh · Data Product Owner · Intermountain Health</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's improvements only require 20% effort to implement, but have an 80% impact."</p><div class="endorsement-attribution">Russ Conser · CEO · Blue Nest Beef</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan understands both the limitations and power of language — both visual and verbal."</p><div class="endorsement-attribution">Brad Londy · Copywriter / Creative Director · Palo Alto Networks</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"You are the 'one that got away'. F*** you. (On my last day)"</p><div class="endorsement-attribution">Elise Kolaja · SVP, Creative Director · Crosby Communications</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"His research gave us the needed step to move us forward."</p><div class="endorsement-attribution">Melanie Rassmussen · Implementation Director · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan does 'Class A' work."</p><div class="endorsement-attribution">Steve Beier · Product Portfolio Executive · DroneUp + IBM Alum</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"We've had countless agencies do research for us, but Dan is the only one who told us 'the why' of what our users are thinking and doing."</p><div class="endorsement-attribution">Sherry Martin · Director of Digital Strategies and Solutions · EY</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"He is a rare combination of strategic thinking, strong visual craft and a genuine empathy for users."</p><div class="endorsement-attribution">Hanna Helouin · Product Designer · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan has done phenomenal work for our E-Commerce Platform. He's irreplaceable!"</p><div class="endorsement-attribution">Joshua Rapp · Director of Experience · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is the deadly combo of User Experience and Product Management. It's insane."</p><div class="endorsement-attribution">Tirath Chhatriwala · Product Manager, Mobile Commerce · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"In 'professional environments', not everyone is always professional. Dan IS always a professional!"</p><div class="endorsement-attribution">Steve Beier · Product Portfolio Executive · DroneUp + IBM Alum</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"No one seems to know where our product needs to go more than Dan."</p><div class="endorsement-attribution">Michael Brummett · Creative Director · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's ability to adapt to evolving projects and stay focused on customers' needs sets him apart."</p><div class="endorsement-attribution">Jonathan Owen · Product Vision Executive · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's design work is stellar. He's the best designer we've ever had."</p><div class="endorsement-attribution">Rich Hultman · Senior Innovation Designer and UX Strategist · IBM Watson + Best Buy Alum</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is insightful and diligent on making sure that the user comes first in everything he touches."</p><div class="endorsement-attribution">Mike Kirk · Creative Director · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is the annotation and documentation master!"</p><div class="endorsement-attribution">Chris Chisolm · Product Owner · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's insight, direction, sense of urgency, and long-term vision was invaluable."</p><div class="endorsement-attribution">Sarah Ailabouni · Senior Manager, Tech Transformation · Best Buy</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan has a vast and understanding mindset."</p><div class="endorsement-attribution">Gaurav Vyas · UX Engineer · Timex Group</div></div>
+    <!-- Duplicate for seamless loop -->
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's grasp of web development and trends has really allowed us to push the envelope."</p><div class="endorsement-attribution">Zach Kahn · CTO + Product Manager · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Let me know if you ever need a reference... or if you're interviewing, I'll go with you to the interview."</p><div class="endorsement-attribution">Rich Hultman · Senior Innovation Designer and UX Strategist · IBM Watson + Best Buy Alum</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is one of the most detailed designers I've seen. He is instrumental to our product."</p><div class="endorsement-attribution">Robert Plummer · ML Engineer · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is always thinking outside the box and bringing fresh, creative ideas."</p><div class="endorsement-attribution">Clive Vang · UI/UX Designer · Truist</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"We had 'Microsoft', and Dan gave us 'Apple'."</p><div class="endorsement-attribution">Karen Larsen · Project Manager · Larsen Solutions</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"I always find Dan easy to bounce new ideas off of in order to find the best solution."</p><div class="endorsement-attribution">Eric Lee · Software Engineer · Hulu</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan puts his heart and soul into his work."</p><div class="endorsement-attribution">Scott Brandon · CEO + Owner · The Brandon Agency</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"I sing Dan's praises as often and loudly as I can."</p><div class="endorsement-attribution">Brad Elhert · Director of Business Development · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's really good at UX. I mean really good."</p><div class="endorsement-attribution">Chris Cortilet · Co-Founder · Azul 7</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Do yourself a favor — hire Dan, and you can thank me later!"</p><div class="endorsement-attribution">Steve Brophy · Creative Director · Davis + Co</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Top Tier Design. Top Tier Human."</p><div class="endorsement-attribution">Ben Bischoff · ML Engineer · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan knocks it out of the park. He's flat-out terrific."</p><div class="endorsement-attribution">Hugh MacNiven · Director of Learning Strategy · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan has done absolutely the best analysis for our product!"</p><div class="endorsement-attribution">Claudio Fantinuoli, PhD · Head of Innovation · KUDO Inc</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"90% of where our platform is today is due to Dan's vision."</p><div class="endorsement-attribution">Zach Kahn · CTO + Product Manager · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"I would work with Dan again in a heartbeat."</p><div class="endorsement-attribution">Eric Lee · Software Engineer · Hulu</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is such a kind and authentic person."</p><div class="endorsement-attribution">Linsey Krantz Hsieh · Data Product Owner · Intermountain Health</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's improvements only require 20% effort to implement, but have an 80% impact."</p><div class="endorsement-attribution">Russ Conser · CEO · Blue Nest Beef</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan understands both the limitations and power of language — both visual and verbal."</p><div class="endorsement-attribution">Brad Londy · Copywriter / Creative Director · Palo Alto Networks</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"You are the 'one that got away'. F*** you. (On my last day)"</p><div class="endorsement-attribution">Elise Kolaja · SVP, Creative Director · Crosby Communications</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"His research gave us the needed step to move us forward."</p><div class="endorsement-attribution">Melanie Rassmussen · Implementation Director · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan does 'Class A' work."</p><div class="endorsement-attribution">Steve Beier · Product Portfolio Executive · DroneUp + IBM Alum</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"We've had countless agencies do research for us, but Dan is the only one who told us 'the why' of what our users are thinking and doing."</p><div class="endorsement-attribution">Sherry Martin · Director of Digital Strategies and Solutions · EY</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"He is a rare combination of strategic thinking, strong visual craft and a genuine empathy for users."</p><div class="endorsement-attribution">Hanna Helouin · Product Designer · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan has done phenomenal work for our E-Commerce Platform. He's irreplaceable!"</p><div class="endorsement-attribution">Joshua Rapp · Director of Experience · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is the deadly combo of User Experience and Product Management. It's insane."</p><div class="endorsement-attribution">Tirath Chhatriwala · Product Manager, Mobile Commerce · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"In 'professional environments', not everyone is always professional. Dan IS always a professional!"</p><div class="endorsement-attribution">Steve Beier · Product Portfolio Executive · DroneUp + IBM Alum</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"No one seems to know where our product needs to go more than Dan."</p><div class="endorsement-attribution">Michael Brummett · Creative Director · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's ability to adapt to evolving projects and stay focused on customers' needs sets him apart."</p><div class="endorsement-attribution">Jonathan Owen · Product Vision Executive · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's design work is stellar. He's the best designer we've ever had."</p><div class="endorsement-attribution">Rich Hultman · Senior Innovation Designer and UX Strategist · IBM Watson + Best Buy Alum</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is insightful and diligent on making sure that the user comes first in everything he touches."</p><div class="endorsement-attribution">Mike Kirk · Creative Director · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is the annotation and documentation master!"</p><div class="endorsement-attribution">Chris Chisolm · Product Owner · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's insight, direction, sense of urgency, and long-term vision was invaluable."</p><div class="endorsement-attribution">Sarah Ailabouni · Senior Manager, Tech Transformation · Best Buy</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan has a vast and understanding mindset."</p><div class="endorsement-attribution">Gaurav Vyas · UX Engineer · Timex Group</div></div>
+  </div>
+</section>
+
+<!-- ============================================
+     ABOUT
+     ============================================ -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-label">About</div>
+      <div class="about-content">
+        <h2 class="about-name">Dan Benner</h2>
+        <div class="about-role">Product Owner · AI Strategist</div>
+        <p class="about-text">I specialize in the moment before the roadmap — when the problem hasn't been correctly identified and the team is building toward the wrong target. My work starts with diagnosis: interviews, data, pattern recognition across domains. The deliverable isn't a wireframe. It's clarity.</p>
+        <p class="about-text">Eight years across healthcare AI, drone logistics, enterprise CRM, agricultural technology, and veteran services. Every engagement started with a misdiagnosis I was hired to confirm — and ended with a different, better question.</p>
+        <div class="about-contact">
+          <a href="https://www.linkedin.com/in/danbenner/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://drive.google.com/file/d/1BBcFm7eDvmtbxpdUEBEdTd5R9DCMj9oq/view?usp=drive_link" target="_blank" rel="noopener">Resume</a>
+        </div>
+        <div class="about-info">
+          St. Paul, Minnesota (Central Time)<br>
+          benner.dan@gmail.com
+        </div>
+        <div class="about-seals">
+          <a href="https://bcert.me/bc/html/show-badge.html?b=jttbpsao" target="_blank" rel="noopener"><img src="images/seal-cspo.jpg" alt="Certified Scrum Product Owner"></a>
+          <a href="https://bcert.me/bc/html/show-badge.html?b=qoxpnkmy" target="_blank" rel="noopener"><img src="images/seal-csm.jpg" alt="Certified ScrumMaster"></a>
+          <a href="https://drive.google.com/file/d/12oYYyPOWrtv8fO9ufugPcZNyhaYdA6fT/view?usp=sharing" target="_blank" rel="noopener"><img src="images/nielsennorman.png" alt="Nielsen Norman Group Certified"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================
+     JAVASCRIPT
+     ============================================ -->
+<script>
+// ============================================
+// MOBILE NAV
+// ============================================
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileNav.classList.toggle('open');
+});
+
+mobileNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    mobileNav.classList.remove('open');
+  });
+});
+
+// ============================================
+// SEGMENTED CONTROLLER
+// ============================================
+document.querySelectorAll('.seg-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const seg = btn.getAttribute('data-seg');
+    const project = btn.getAttribute('data-project');
+
+    // Deactivate siblings
+    btn.parentElement.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Show corresponding panel, hide others
+    const panels = btn.closest('.project-content').querySelectorAll('.seg-panel');
+    panels.forEach(p => p.classList.remove('active'));
+    document.getElementById('seg-' + seg + '-' + project).classList.add('active');
+  });
+});
+
+// ============================================
+// PARTICLE CANVAS
+// ============================================
+(() => {
+  const canvas = document.getElementById('heroCanvas');
+  const ctx = canvas.getContext('2d');
+  let width, height, particles, mouse;
+
+  const PARTICLE_COUNT = 90;
+  const CONNECTION_DIST = 140;
+  const MOUSE_RADIUS = 280;
+  const MOUSE_FORCE = 0.04;
+  const MAX_RED = 3;
+
+  // Gray palette for particles
+  const GRAYS = [
+    { r: 237, g: 230, b: 216 }, // cream
+    { r: 200, g: 195, b: 185 }, // warm mid gray
+    { r: 160, g: 156, b: 148 }, // cool mid gray
+    { r: 120, g: 117, b: 112 }, // darker gray
+    { r: 90, g: 88, b: 84 },    // dark gray
+  ];
+  const RED = { r: 255, g: 91, b: 74 }; // matches --red #ff5b4a
+
+  mouse = { x: -1000, y: -1000 };
+
+  function ease(t) {
+    // Smooth ease in-out
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  }
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    width = rect.width;
+    height = rect.height;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function createParticles() {
+    particles = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const gray = GRAYS[Math.floor(Math.random() * GRAYS.length)];
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: Math.random() * 4 + 1.5,
+        opacity: Math.random() * 0.5 + 0.25,
+        // Color: base gray, with red blend
+        baseColor: gray,
+        redAmount: 0,        // 0 = full gray, 1 = full red
+        redTarget: 0,        // what we're easing toward
+        redSpeed: 0,         // how fast we transition
+        redTimer: Math.random() * 600 + 200, // frames until next red check
+      });
+    }
+  }
+
+  function countRedParticles() {
+    let count = 0;
+    for (const p of particles) {
+      if (p.redTarget > 0.3) count++;
+    }
+    return count;
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+
+      // Mouse attraction
+      const dx = mouse.x - p.x;
+      const dy = mouse.y - p.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < MOUSE_RADIUS && dist > 0) {
+        const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * MOUSE_FORCE;
+        p.vx += dx / dist * force;
+        p.vy += dy / dist * force;
+      }
+
+      p.vx *= 0.985;
+      p.vy *= 0.985;
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // Wrap
+      if (p.x < -10) p.x = width + 10;
+      if (p.x > width + 10) p.x = -10;
+      if (p.y < -10) p.y = height + 10;
+      if (p.y > height + 10) p.y = -10;
+
+      // Red fade logic
+      p.redTimer--;
+      if (p.redTimer <= 0) {
+        if (p.redTarget > 0.3) {
+          // Currently red — fade back to gray
+          p.redTarget = 0;
+          p.redSpeed = 0.003 + Math.random() * 0.004; // slow fade out
+          p.redTimer = Math.random() * 400 + 200;
+        } else if (countRedParticles() < MAX_RED && Math.random() < 0.08) {
+          // Chance to become red
+          p.redTarget = 0.8 + Math.random() * 0.2;
+          p.redSpeed = 0.005 + Math.random() * 0.006; // slow fade in
+          p.redTimer = Math.random() * 300 + 150;
+        } else {
+          p.redTimer = Math.random() * 200 + 60;
+        }
+      }
+
+      // Ease red amount toward target
+      if (p.redAmount < p.redTarget) {
+        p.redAmount = Math.min(p.redAmount + p.redSpeed, p.redTarget);
+      } else if (p.redAmount > p.redTarget) {
+        p.redAmount = Math.max(p.redAmount - p.redSpeed, p.redTarget);
+      }
+
+      // Interpolate color
+      const t = ease(p.redAmount);
+      const cr = Math.round(p.baseColor.r + (RED.r - p.baseColor.r) * t);
+      const cg = Math.round(p.baseColor.g + (RED.g - p.baseColor.g) * t);
+      const cb = Math.round(p.baseColor.b + (RED.b - p.baseColor.b) * t);
+      // Red particles glow a bit brighter
+      const op = p.opacity + t * 0.3;
+
+      // Draw particle
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r + t * 0.8, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${op})`;
+      ctx.fill();
+
+      // Connections
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const cdx = p.x - p2.x;
+        const cdy = p.y - p2.y;
+        const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
+        if (cdist < CONNECTION_DIST) {
+          const alpha = (1 - cdist / CONNECTION_DIST) * 0.12;
+          // Tint connection lines if either particle is red
+          const maxRed = Math.max(t, ease(p2.redAmount));
+          const lr = Math.round(160 + (RED.r - 160) * maxRed * 0.5);
+          const lg = Math.round(156 + (RED.g - 156) * maxRed * 0.5);
+          const lb = Math.round(148 + (RED.b - 148) * maxRed * 0.5);
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(${lr}, ${lg}, ${lb}, ${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  // Track mouse within the hero section
+  const heroEl = document.querySelector('.hero');
+  heroEl.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  heroEl.addEventListener('mouseleave', () => {
+    mouse.x = -1000;
+    mouse.y = -1000;
+  });
+
+  window.addEventListener('resize', resize);
+  resize();
+  createParticles();
+  animate();
+})();
+</script>
+</body>
+</html>
