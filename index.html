@@ -15,7 +15,7 @@
   --bg: #1a1a1a;
   --cream: #ede6d8;
   --white: #f5f5f0;
-  --red: #ff5b4a;
+  --red: #ff5544;
   --surface: #242424;
   --surface-2: #2e2e2e;
   --serif: 'DM Serif Display', serif;
@@ -76,7 +76,7 @@ body::after {
 /* ============================================
    LAYOUT
    ============================================ */
-.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 4; }
 section { position: relative; z-index: 1; }
 
 /* ============================================
@@ -112,11 +112,11 @@ nav {
 }
 .nav-logo-name {
   font-family: var(--sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--cream);
   text-transform: uppercase;
-  letter-spacing: 3.5px;
+  letter-spacing: 5px;
   font-variant: small-caps;
   opacity: 0.7;
 }
@@ -240,7 +240,7 @@ nav {
   align-items: center;
   padding-top: 80px;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 }
 .hero-grid {
   display: grid;
@@ -252,7 +252,7 @@ nav {
 }
 .hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 4;
 }
 .hero-label {
   font-family: 'Orbitron', var(--sans);
@@ -311,11 +311,31 @@ nav {
 }
 .hero-canvas-wrap {
   position: absolute;
-  top: -25%;
-  right: -60px;
-  width: 90%;
-  height: 130%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
+  pointer-events: none;
+}
+.hero-canvas-fade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(to right, var(--bg), transparent);
+  z-index: 3;
+  pointer-events: none;
+}
+.hero-canvas-fade-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20%;
+  height: 100%;
+  background: linear-gradient(to left, var(--bg), transparent);
+  z-index: 3;
   pointer-events: none;
 }
 #heroCanvas {
@@ -488,13 +508,13 @@ nav {
   border-left: none;
 }
 .seg-btn:hover {
-  background: var(--red);
-  border-color: var(--red);
+  background: #a41608;
+  border-color: #a41608;
   color: var(--white);
 }
 .seg-btn.active {
-  background: var(--red);
-  border-color: var(--red);
+  background: #a41608;
+  border-color: #a41608;
   color: var(--white);
 }
 
@@ -699,9 +719,49 @@ nav {
   border-radius: 20px;
   transition: background 0.2s, color 0.2s;
 }
-.about-contact a:hover {
+.about-contact a:hover,
+.about-contact .email-btn:hover {
   background: var(--cream);
   color: var(--bg);
+}
+.email-btn {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cream);
+  text-decoration: none;
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: default;
+}
+.email-text {
+  border-right: 1px solid var(--border);
+  padding-right: 12px;
+}
+.email-copy {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.email-copy:hover {
+  opacity: 1;
+}
+.email-copy svg {
+  width: 14px;
+  height: 14px;
+}
+.email-copy.copied {
+  color: var(--red);
+  opacity: 1;
 }
 .about-info {
   font-family: var(--sans);
@@ -781,7 +841,7 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <nav>
   <div class="nav-inner">
     <a href="#" class="nav-logo">
-      <span class="nav-logo-domain">danpo.com</span>
+      <span class="nav-logo-domain">dancspo.com</span>
       <span class="nav-logo-name">Dan Benner</span>
     </a>
     <ul class="nav-links">
@@ -795,6 +855,7 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
           <a href="#intuitive">Intuitive Surgical</a>
           <a href="#kudo">KUDO</a>
           <a href="#nagios">Nagios</a>
+          <a href="#pointclickcare">PointClickCare</a>
           <a href="#stealth">Stealth AI</a>
           <a href="#vetavize">Vetavize</a>
         </div>
@@ -817,6 +878,7 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
   <a href="#intuitive" class="mobile-nav-link">Intuitive Surgical</a>
   <a href="#kudo" class="mobile-nav-link">KUDO</a>
   <a href="#nagios" class="mobile-nav-link">Nagios</a>
+  <a href="#pointclickcare" class="mobile-nav-link">PointClickCare</a>
   <a href="#stealth" class="mobile-nav-link">Stealth AI</a>
   <a href="#vetavize" class="mobile-nav-link">Vetavize</a>
   <a href="#about" class="mobile-nav-link">About</a>
@@ -826,6 +888,11 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
      HERO
      ============================================ -->
 <section class="hero">
+  <div class="hero-canvas-wrap">
+    <canvas id="heroCanvas"></canvas>
+  </div>
+  <div class="hero-canvas-fade"></div>
+  <div class="hero-canvas-fade-right"></div>
   <div class="container">
     <div class="hero-grid">
       <div class="hero-content">
@@ -840,9 +907,6 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
           <a href="#projects" class="btn">View Work</a>
           <a href="https://drive.google.com/file/d/1BBcFm7eDvmtbxpdUEBEdTd5R9DCMj9oq/view?usp=drive_link" target="_blank" rel="noopener" class="btn">Resume</a>
         </div>
-      </div>
-      <div class="hero-canvas-wrap">
-        <canvas id="heroCanvas"></canvas>
       </div>
     </div>
   </div>
@@ -1185,6 +1249,44 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 
 
 
+    <!-- POINTCLICKCARE -->
+    <div class="project-block" id="pointclickcare">
+      <div class="project-grid">
+        <div class="style-tile">
+          <img src="images/pcc.png" alt="PointClickCare key slide" class="style-tile-img">
+          <div class="style-tile-meta">
+            <span class="pill">Product Designer + Researcher</span>
+            <span class="pill">0000</span>
+          </div>
+        </div>
+        <div class="project-content">
+          <div class="project-role">Product Designer + Researcher</div>
+          <p class="project-desc">[Description to be added]</p>
+          <div class="segmented-controller">
+            <button class="seg-btn active" data-seg="narrative" data-project="pointclickcare">What Was Broken</button>
+            <button class="seg-btn" data-seg="overview" data-project="pointclickcare">Overview</button>
+            <button class="seg-btn" data-seg="prd" data-project="pointclickcare">PRD</button>
+          </div>
+          <div class="seg-panel active" id="seg-narrative-pointclickcare">
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">[Narrative content to be added]</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">[Narrative content to be added]</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">[Narrative content to be added]</p></div>
+          </div>
+          <div class="seg-panel" id="seg-overview-pointclickcare"><p class="overview-text">[Overview content to be added]</p></div>
+          <div class="seg-panel" id="seg-prd-pointclickcare">
+            <div class="prd-table"><div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">Problem Definition</div><div class="prd-table"><div class="prd-row"><div class="prd-label">Objective</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Success Metric</div><div class="prd-value">[placeholder]</div></div><div class="prd-row"><div class="prd-label">Stakeholders</div><div class="prd-value">[placeholder]</div></div></div>
+            <div class="prd-section-title">User Stories</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Requirements</div><p class="overview-text">[placeholder]</p><div class="prd-section-title">Out of Scope</div><p class="overview-text">[placeholder]</p>
+          </div>
+          <!-- <div class="project-meta-grid">
+            <div class="meta-cell"><div class="meta-cell-label">Process</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Outcomes</div></div>
+            <div class="meta-cell"><div class="meta-cell-label">Tools</div></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
     <!-- STEALTH AI -->
     <div class="project-block" id="stealth">
       <div class="project-grid">
@@ -1352,12 +1454,19 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
         <p class="about-text">I specialize in the moment before the roadmap — when the problem hasn't been correctly identified and the team is building toward the wrong target. My work starts with diagnosis: interviews, data, pattern recognition across domains. The deliverable isn't a wireframe. It's clarity.</p>
         <p class="about-text">Eight years across healthcare AI, drone logistics, enterprise CRM, agricultural technology, and veteran services. Every engagement started with a misdiagnosis I was hired to confirm — and ended with a different, better question.</p>
         <div class="about-contact">
+          <div class="email-btn">
+            <span class="email-text">benner.dan@gmail.com</span>
+            <span class="email-copy" id="emailCopy" title="Copy to clipboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span id="emailCopyLabel">Copy</span>
+            </span>
+          </div>
           <a href="https://www.linkedin.com/in/danbenner/" target="_blank" rel="noopener">LinkedIn</a>
           <a href="https://drive.google.com/file/d/1BBcFm7eDvmtbxpdUEBEdTd5R9DCMj9oq/view?usp=drive_link" target="_blank" rel="noopener">Resume</a>
         </div>
         <div class="about-info">
           St. Paul, Minnesota (Central Time)<br>
-          benner.dan@gmail.com
+          (843) 504-7221
         </div>
         <div class="about-seals">
           <a href="https://bcert.me/bc/html/show-badge.html?b=jttbpsao" target="_blank" rel="noopener"><img src="images/seal-cspo.jpg" alt="Certified Scrum Product Owner"></a>
@@ -1393,6 +1502,20 @@ mobileNav.querySelectorAll('a').forEach(link => {
 });
 
 // ============================================
+// EMAIL COPY TO CLIPBOARD
+document.getElementById('emailCopy').addEventListener('click', () => {
+  navigator.clipboard.writeText('benner.dan@gmail.com').then(() => {
+    const label = document.getElementById('emailCopyLabel');
+    const copyBtn = document.getElementById('emailCopy');
+    label.textContent = 'Copied';
+    copyBtn.classList.add('copied');
+    setTimeout(() => {
+      label.textContent = 'Copy';
+      copyBtn.classList.remove('copied');
+    }, 2000);
+  });
+});
+
 // SEGMENTED CONTROLLER
 // ============================================
 document.querySelectorAll('.seg-btn').forEach(btn => {
@@ -1419,26 +1542,88 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
   const ctx = canvas.getContext('2d');
   let width, height, particles, mouse;
 
-  const PARTICLE_COUNT = 90;
-  const CONNECTION_DIST = 140;
-  const MOUSE_RADIUS = 280;
-  const MOUSE_FORCE = 0.04;
-  const MAX_RED = 3;
+  // ---- LAYER CONFIG ----
+  // Deep layer: dense, tiny, nearly static — like distant stars
+  const DEEP = {
+    count: 625,
+    connectionDist: 0,
+    mouseRadius: 300,
+    mouseForce: 0.015,
+    damping: 0.94,
+    rMin: 1.2, rMax: 2.8, // fallback, overridden by tiers
+    opMin: 0.25, opMax: 0.5,
+    speed: 0.002,
+    tiers: [
+      { rMin: 0.6, rMax: 1.2, opMin: 0.12, opMax: 0.25 },  // small, faint
+      { rMin: 1.2, rMax: 2.0, opMin: 0.25, opMax: 0.4 },   // medium
+      { rMin: 2.0, rMax: 3.2, opMin: 0.35, opMax: 0.55 },  // large, brighter
+    ],
+    lineAlpha: 0.03,
+    lineWidth: 0.2,
+    grays: [
+      { r: 65, g: 65, b: 65 },
+      { r: 56, g: 56, b: 56 },
+      { r: 49, g: 49, b: 49 },
+      { r: 72, g: 72, b: 72 },
+    ],
+    redChance: 0,
+    maxRed: 0,
+  };
 
-  // Gray palette for particles
-  const GRAYS = [
-    { r: 237, g: 230, b: 216 }, // cream
-    { r: 200, g: 195, b: 185 }, // warm mid gray
-    { r: 160, g: 156, b: 148 }, // cool mid gray
-    { r: 120, g: 117, b: 112 }, // darker gray
-    { r: 90, g: 88, b: 84 },    // dark gray
-  ];
-  const RED = { r: 255, g: 91, b: 74 }; // matches --red #ff5b4a
+  // Mid layer: medium density, slow drift — atmosphere
+  const BACK = {
+    count: 260,
+    connectionDist: 100,
+    mouseRadius: 200,
+    mouseForce: 0.0003,
+    damping: 0.93,
+    rMin: 0.5, rMax: 1.8,
+    opMin: 0.06, opMax: 0.15,
+    speed: 0.06,
+    lineAlpha: 0.05,
+    lineWidth: 0.3,
+    grays: [
+      { r: 60, g: 58, b: 55 },
+      { r: 50, g: 48, b: 46 },
+      { r: 42, g: 40, b: 38 },
+      { r: 35, g: 34, b: 32 },
+    ],
+    redChance: 0,
+    maxRed: 0,
+  };
 
+  // Front layer: fewer, bigger, brighter, reactive — foreground
+  const FRONT = {
+    count: 180,
+    connectionDist: 140,
+    mouseRadius: 280,
+    mouseForce: 0.04,
+    damping: 0.985,
+    rMin: 1.5, rMax: 5.5,
+    opMin: 0.25, opMax: 0.75,
+    speed: 0.35,
+    lineAlpha: 0.12,
+    lineWidth: 0.5,
+    grays: [
+      { r: 237, g: 230, b: 216 },
+      { r: 200, g: 195, b: 185 },
+      { r: 160, g: 156, b: 148 },
+      { r: 120, g: 117, b: 112 },
+      { r: 90, g: 88, b: 84 },
+    ],
+    redChance: 0.08,
+    maxRed: 3,
+  };
+
+  const RED = { r: 255, g: 85, b: 68 }; // matches --red #ff5544
+
+  let deepParticles = [];
+  let backParticles = [];
+  let frontParticles = [];
   mouse = { x: -1000, y: -1000 };
+  let tick = 0; // global frame counter for ebb/flow
 
   function ease(t) {
-    // Smooth ease in-out
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
   }
 
@@ -1454,53 +1639,77 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function createParticles() {
-    particles = [];
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const gray = GRAYS[Math.floor(Math.random() * GRAYS.length)];
-      particles.push({
+  function createLayer(cfg) {
+    const arr = [];
+    for (let i = 0; i < cfg.count; i++) {
+      const gray = cfg.grays[Math.floor(Math.random() * cfg.grays.length)];
+      let r, opacity;
+      if (cfg.tiers) {
+        // Pick a random tier — size and opacity are linked
+        const tier = cfg.tiers[Math.floor(Math.random() * cfg.tiers.length)];
+        r = Math.random() * (tier.rMax - tier.rMin) + tier.rMin;
+        opacity = Math.random() * (tier.opMax - tier.opMin) + tier.opMin;
+      } else {
+        r = Math.random() * (cfg.rMax - cfg.rMin) + cfg.rMin;
+        opacity = Math.random() * (cfg.opMax - cfg.opMin) + cfg.opMin;
+      }
+      arr.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        r: Math.random() * 4 + 1.5,
-        opacity: Math.random() * 0.5 + 0.25,
-        // Color: base gray, with red blend
+        vx: (Math.random() - 0.5) * cfg.speed,
+        vy: (Math.random() - 0.5) * cfg.speed,
+        r: r,
+        opacity: opacity,
         baseColor: gray,
-        redAmount: 0,        // 0 = full gray, 1 = full red
-        redTarget: 0,        // what we're easing toward
-        redSpeed: 0,         // how fast we transition
-        redTimer: Math.random() * 600 + 200, // frames until next red check
+        redAmount: 0,
+        redTarget: 0,
+        redSpeed: 0,
+        redTimer: Math.random() * 600 + 200,
+        // Ebb/flow: unique phase offsets for organic drift near mouse
+        ebX: Math.random() * Math.PI * 2,
+        ebY: Math.random() * Math.PI * 2,
+        ebFreq: 0.003 + Math.random() * 0.004,  // slow, varied per particle
+        ebAmp: 0.015 + Math.random() * 0.02,
       });
     }
+    return arr;
   }
 
-  function countRedParticles() {
-    let count = 0;
-    for (const p of particles) {
-      if (p.redTarget > 0.3) count++;
-    }
-    return count;
+  function createParticles() {
+    deepParticles = createLayer(DEEP);
+    backParticles = createLayer(BACK);
+    frontParticles = createLayer(FRONT);
   }
 
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
+  function countRed(arr) {
+    let c = 0;
+    for (const p of arr) { if (p.redTarget > 0.3) c++; }
+    return c;
+  }
 
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
+  function updateAndDraw(arr, cfg) {
+    for (let i = 0; i < arr.length; i++) {
+      const p = arr[i];
 
       // Mouse attraction
       const dx = mouse.x - p.x;
       const dy = mouse.y - p.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < MOUSE_RADIUS && dist > 0) {
-        const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * MOUSE_FORCE;
+      if (dist < cfg.mouseRadius && dist > 0) {
+        const force = (cfg.mouseRadius - dist) / cfg.mouseRadius * cfg.mouseForce;
         p.vx += dx / dist * force;
         p.vy += dy / dist * force;
       }
 
-      p.vx *= 0.985;
-      p.vy *= 0.985;
+      // Ebb/flow: subtle random drift within 200px of mouse
+      if (dist < 200 && dist > 0) {
+        const ebStrength = (200 - dist) / 200;
+        p.vx += Math.sin(tick * p.ebFreq + p.ebX) * p.ebAmp * ebStrength;
+        p.vy += Math.cos(tick * p.ebFreq + p.ebY) * p.ebAmp * ebStrength;
+      }
+
+      p.vx *= cfg.damping;
+      p.vy *= cfg.damping;
       p.x += p.vx;
       p.y += p.vy;
 
@@ -1510,37 +1719,35 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
       if (p.y < -10) p.y = height + 10;
       if (p.y > height + 10) p.y = -10;
 
-      // Red fade logic
-      p.redTimer--;
-      if (p.redTimer <= 0) {
-        if (p.redTarget > 0.3) {
-          // Currently red — fade back to gray
-          p.redTarget = 0;
-          p.redSpeed = 0.003 + Math.random() * 0.004; // slow fade out
-          p.redTimer = Math.random() * 400 + 200;
-        } else if (countRedParticles() < MAX_RED && Math.random() < 0.08) {
-          // Chance to become red
-          p.redTarget = 0.8 + Math.random() * 0.2;
-          p.redSpeed = 0.005 + Math.random() * 0.006; // slow fade in
-          p.redTimer = Math.random() * 300 + 150;
-        } else {
-          p.redTimer = Math.random() * 200 + 60;
+      // Red fade logic (only if layer supports it)
+      let t = 0;
+      if (cfg.maxRed > 0) {
+        p.redTimer--;
+        if (p.redTimer <= 0) {
+          if (p.redTarget > 0.3) {
+            p.redTarget = 0;
+            p.redSpeed = 0.003 + Math.random() * 0.004;
+            p.redTimer = Math.random() * 400 + 200;
+          } else if (countRed(arr) < cfg.maxRed && Math.random() < cfg.redChance) {
+            p.redTarget = 0.8 + Math.random() * 0.2;
+            p.redSpeed = 0.005 + Math.random() * 0.006;
+            p.redTimer = Math.random() * 300 + 150;
+          } else {
+            p.redTimer = Math.random() * 200 + 60;
+          }
         }
-      }
-
-      // Ease red amount toward target
-      if (p.redAmount < p.redTarget) {
-        p.redAmount = Math.min(p.redAmount + p.redSpeed, p.redTarget);
-      } else if (p.redAmount > p.redTarget) {
-        p.redAmount = Math.max(p.redAmount - p.redSpeed, p.redTarget);
+        if (p.redAmount < p.redTarget) {
+          p.redAmount = Math.min(p.redAmount + p.redSpeed, p.redTarget);
+        } else if (p.redAmount > p.redTarget) {
+          p.redAmount = Math.max(p.redAmount - p.redSpeed, p.redTarget);
+        }
+        t = ease(p.redAmount);
       }
 
       // Interpolate color
-      const t = ease(p.redAmount);
       const cr = Math.round(p.baseColor.r + (RED.r - p.baseColor.r) * t);
       const cg = Math.round(p.baseColor.g + (RED.g - p.baseColor.g) * t);
       const cb = Math.round(p.baseColor.b + (RED.b - p.baseColor.b) * t);
-      // Red particles glow a bit brighter
       const op = p.opacity + t * 0.3;
 
       // Draw particle
@@ -1549,45 +1756,90 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
       ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${op})`;
       ctx.fill();
 
-      // Connections
-      for (let j = i + 1; j < particles.length; j++) {
-        const p2 = particles[j];
+      // Connections (skip if no connectionDist)
+      if (cfg.connectionDist === 0) continue;
+      for (let j = i + 1; j < arr.length; j++) {
+        const p2 = arr[j];
         const cdx = p.x - p2.x;
         const cdy = p.y - p2.y;
         const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
-        if (cdist < CONNECTION_DIST) {
-          const alpha = (1 - cdist / CONNECTION_DIST) * 0.12;
-          // Tint connection lines if either particle is red
+        if (cdist < cfg.connectionDist) {
+          const alpha = (1 - cdist / cfg.connectionDist) * cfg.lineAlpha;
           const maxRed = Math.max(t, ease(p2.redAmount));
-          const lr = Math.round(160 + (RED.r - 160) * maxRed * 0.5);
-          const lg = Math.round(156 + (RED.g - 156) * maxRed * 0.5);
-          const lb = Math.round(148 + (RED.b - 148) * maxRed * 0.5);
+          const lr = Math.round(p.baseColor.r + (RED.r - p.baseColor.r) * maxRed * 0.5);
+          const lg = Math.round(p.baseColor.g + (RED.g - p.baseColor.g) * maxRed * 0.5);
+          const lb = Math.round(p.baseColor.b + (RED.b - p.baseColor.b) * maxRed * 0.5);
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(p2.x, p2.y);
           ctx.strokeStyle = `rgba(${lr}, ${lg}, ${lb}, ${alpha})`;
-          ctx.lineWidth = 0.5;
+          ctx.lineWidth = cfg.lineWidth;
           ctx.stroke();
         }
       }
     }
+  }
 
+  // Slow rotation: 1 revolution per 120 seconds
+  const ROTATION_SPEED = (Math.PI * 2) / (1200 * 60); // radians per frame at 60fps — 1 rev per 20 min
+  let rotation = 0;
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    tick++;
+    rotation += ROTATION_SPEED;
+
+    // Rotate around center of canvas
+    ctx.save();
+    ctx.translate(width / 2, height / 2);
+    ctx.rotate(rotation);
+    ctx.translate(-width / 2, -height / 2);
+
+    // Draw deepest first, then mid, then front
+    updateAndDraw(deepParticles, DEEP);
+    updateAndDraw(backParticles, BACK);
+    updateAndDraw(frontParticles, FRONT);
+
+    ctx.restore();
     requestAnimationFrame(animate);
   }
 
-  // Track mouse within the hero section
+  // Track mouse/touch within the hero section
   const heroEl = document.querySelector('.hero');
-  heroEl.addEventListener('mousemove', (e) => {
+  function screenToCanvas(clientX, clientY) {
     const rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
+    const sx = clientX - rect.left;
+    const sy = clientY - rect.top;
+    // Un-rotate to match the rotated canvas context
+    const cx = width / 2, cy = height / 2;
+    const cos = Math.cos(-rotation);
+    const sin = Math.sin(-rotation);
+    const dx = sx - cx, dy = sy - cy;
+    return { x: cos * dx - sin * dy + cx, y: sin * dx + cos * dy + cy };
+  }
+  heroEl.addEventListener('mousemove', (e) => {
+    const m = screenToCanvas(e.clientX, e.clientY);
+    mouse.x = m.x;
+    mouse.y = m.y;
   });
   heroEl.addEventListener('mouseleave', () => {
     mouse.x = -1000;
     mouse.y = -1000;
   });
+  heroEl.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    const m = screenToCanvas(touch.clientX, touch.clientY);
+    mouse.x = m.x;
+    mouse.y = m.y;
+  }, { passive: true });
+  heroEl.addEventListener('touchend', () => {
+    mouse.x = -1000;
+    mouse.y = -1000;
+  });
 
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', () => { resize(); createParticles(); });
+  window.addEventListener('orientationchange', () => { setTimeout(() => { resize(); createParticles(); }, 200); });
   resize();
   createParticles();
   animate();
