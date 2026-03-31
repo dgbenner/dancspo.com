@@ -1618,8 +1618,8 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
       { r: 120, g: 117, b: 112 },
       { r: 90, g: 88, b: 84 },
     ],
-    redChance: 0.08,
-    maxRed: 3,
+    redChance: 0.12,
+    maxRed: 6,
   };
 
   const RED = { r: 255, g: 85, b: 68 }; // matches --red #ff5544
@@ -1735,7 +1735,7 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
             p.redTarget = 0;
             p.redSpeed = 0.003 + Math.random() * 0.004;
             p.redTimer = Math.random() * 400 + 200;
-          } else if (countRed(arr) < cfg.maxRed && Math.random() < cfg.redChance) {
+          } else if (countRed(arr) < cfg.maxRed && Math.random() < cfg.redChance * (dist < cfg.mouseRadius ? 4 : 0.3)) {
             p.redTarget = 0.8 + Math.random() * 0.2;
             p.redSpeed = 0.005 + Math.random() * 0.006;
             p.redTimer = Math.random() * 300 + 150;
