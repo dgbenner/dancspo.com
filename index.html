@@ -6,7 +6,7 @@
 <title>Dan Benner — Product Owner &amp; AI Strategist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Libre+Caslon+Display&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Libre+Caslon+Display&family=IBM+Plex+Mono:wght@400;500&family=Orbitron:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 /* ============================================
    CSS CUSTOM PROPERTIES
@@ -127,8 +127,8 @@ nav {
   list-style: none;
 }
 .nav-links a {
-  font-family: var(--sans);
-  font-size: 14px;
+  font-family: 'Orbitron', var(--sans);
+  font-size: 11px;
   font-weight: 500;
   color: var(--cream);
   text-decoration: none;
@@ -219,8 +219,8 @@ nav {
 }
 .nav-mobile.open { display: flex; }
 .nav-mobile a {
-  font-family: var(--sans);
-  font-size: 18px;
+  font-family: 'Orbitron', var(--sans);
+  font-size: 14px;
   font-weight: 500;
   color: var(--cream);
   text-decoration: none;
@@ -255,9 +255,9 @@ nav {
   z-index: 2;
 }
 .hero-label {
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 600;
+  font-family: 'Orbitron', var(--sans);
+  font-size: 11px;
+  font-weight: 500;
   color: var(--cream);
   text-transform: uppercase;
   letter-spacing: 3px;
@@ -268,11 +268,20 @@ nav {
   font-size: clamp(43px, 6vw, 78px);
   color: var(--white);
   line-height: 1.1;
+  letter-spacing: -1.5px;
   margin-top: 12px;
   margin-bottom: 32px;
   text-shadow: 0 0 40px rgba(26, 26, 26, 1), 0 0 80px rgba(26, 26, 26, 1), 0 0 120px rgba(26, 26, 26, 1);
 }
 .hero-headline span { display: block; }
+/* .hero-possible {
+  display: inline-block;
+  position: relative;
+  vertical-align: baseline;
+}
+.hero-possible svg {
+  display: block;
+} */
 
 .hero-body {
   font-size: 16px;
@@ -404,7 +413,7 @@ nav {
   object-fit: cover;
   display: block;
 }
-.style-tile-meta {
+/* .style-tile-meta {
   font-family: var(--mono);
   font-size: 11px;
   color: var(--white);
@@ -416,7 +425,8 @@ nav {
   flex-wrap: wrap;
   position: relative;
   z-index: 2;
-}
+} */
+.style-tile-meta { display: none; }
 .pill {
   background: rgba(0, 0, 0, 0.65);
   padding: 4px 12px;
@@ -429,8 +439,8 @@ nav {
 
 /* Project content */
 .project-role {
-  font-family: var(--sans);
-  font-size: 13px;
+  font-family: 'Orbitron', var(--sans);
+  font-size: 14px;
   font-weight: 500;
   color: var(--cream);
   text-transform: uppercase;
@@ -537,9 +547,9 @@ nav {
   color: var(--white);
 }
 .seg-panel .prd-section-title {
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 600;
+  font-family: 'Orbitron', var(--sans);
+  font-size: 10px;
+  font-weight: 500;
   color: var(--white);
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -584,9 +594,9 @@ nav {
   z-index: 1;
 }
 .endorsements-heading {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 600;
+  font-family: 'Orbitron', var(--sans);
+  font-size: 10px;
+  font-weight: 500;
   color: var(--cream);
   text-transform: uppercase;
   letter-spacing: 3px;
@@ -616,9 +626,9 @@ nav {
   margin-bottom: 20px;
 }
 .endorsement-attribution {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 500;
+  font-family: 'Orbitron', var(--sans);
+  font-size: 8px;
+  font-weight: 400;
   color: var(--cream);
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -658,8 +668,8 @@ nav {
   margin-bottom: 8px;
 }
 .about-role {
-  font-family: var(--sans);
-  font-size: 13px;
+  font-family: 'Orbitron', var(--sans);
+  font-size: 10px;
   font-weight: 500;
   color: var(--cream);
   text-transform: uppercase;
@@ -1162,8 +1172,7 @@ nav {
     <div class="project-block" id="stealth">
       <div class="project-grid">
         <div class="style-tile">
-          <!-- Image placeholder — add stealth.png when available -->
-          <div style="height:180px;display:flex;align-items:center;justify-content:center;color:var(--cream);opacity:0.3;font-family:var(--serif);font-size:48px;">S</div>
+          <img src="images/stealth.png" alt="Stealth AI key slide" class="style-tile-img">
           <div class="style-tile-meta">
             <span class="pill">Product Specialist</span>
             <span class="pill">2024–2026</span>
@@ -1566,6 +1575,184 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
   createParticles();
   animate();
 })();
+
+/* ============================================
+// "POSSIBLE." DOT-FILL SVG ANIMATION — disabled, re-enable later
+// ============================================
+(() => {
+  const container = document.getElementById('hero-possible');
+  if (!container) return;
+
+  const LETTERS = 'possible.'.split('');
+  const DOT_SPACING = 4.5;
+  const DOT_RADIUS = 1.8;
+  const FILL_DURATION = 2000;
+  const HOLD_DURATION = 15000;
+  const LETTER_STAGGER = FILL_DURATION / LETTERS.length;
+
+  const NS = 'http://www.w3.org/2000/svg';
+
+  function build() {
+    // Get computed font style from the headline
+    const headline = container.closest('.hero-headline');
+    const cs = getComputedStyle(headline);
+    const fontSize = parseFloat(getComputedStyle(container).fontSize);
+
+    // Measure each letter using a canvas
+    const measureCanvas = document.createElement('canvas');
+    const mCtx = measureCanvas.getContext('2d');
+    mCtx.font = `${fontSize}px 'Libre Caslon Display', serif`;
+
+    let totalWidth = 0;
+    const letterData = [];
+    for (const ch of LETTERS) {
+      const metrics = mCtx.measureText(ch);
+      const w = metrics.width;
+      letterData.push({ char: ch, x: totalWidth, width: w });
+      totalWidth += w;
+    }
+
+    const height = fontSize * 1.15;
+    const baseline = fontSize * 0.85;
+
+    // Create SVG
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('width', Math.ceil(totalWidth));
+    svg.setAttribute('height', Math.ceil(height));
+    svg.setAttribute('viewBox', `0 0 ${Math.ceil(totalWidth)} ${Math.ceil(height)}`);
+    svg.style.overflow = 'visible';
+
+    const defs = document.createElementNS(NS, 'defs');
+    svg.appendChild(defs);
+
+    const allDots = []; // { el, letterIndex, layer }
+
+    letterData.forEach((ld, li) => {
+      // Create clip path from letter
+      const clipId = `clip-letter-${li}`;
+      const clip = document.createElementNS(NS, 'clipPath');
+      clip.setAttribute('id', clipId);
+
+      const txt = document.createElementNS(NS, 'text');
+      txt.setAttribute('x', ld.x);
+      txt.setAttribute('y', baseline);
+      txt.setAttribute('font-family', "'Libre Caslon Display', serif");
+      txt.setAttribute('font-size', fontSize);
+      txt.setAttribute('font-weight', 'normal');
+      txt.textContent = ld.char;
+      clip.appendChild(txt);
+      defs.appendChild(clip);
+
+      // Create group clipped by this letter
+      const g = document.createElementNS(NS, 'g');
+      g.setAttribute('clip-path', `url(#${clipId})`);
+
+      // Generate dot grid covering this letter's bounding area
+      const startX = ld.x - 1;
+      const endX = ld.x + ld.width + 1;
+      const startY = 0;
+      const endY = height;
+
+      // Two layers of dots: red (bottom), white (top)
+      for (let layer = 0; layer < 2; layer++) {
+        const color = layer === 0 ? '#ff5b4a' : '#f5f5f0';
+        for (let y = startY; y < endY; y += DOT_SPACING) {
+          for (let x = startX; x < endX; x += DOT_SPACING) {
+            const circle = document.createElementNS(NS, 'circle');
+            circle.setAttribute('cx', x + DOT_SPACING / 2);
+            circle.setAttribute('cy', y + DOT_SPACING / 2);
+            circle.setAttribute('r', 0);
+            circle.setAttribute('fill', color);
+            g.appendChild(circle);
+            allDots.push({ el: circle, letterIndex: li, layer: layer });
+          }
+        }
+      }
+
+      svg.appendChild(g);
+    });
+
+    // Also render base white text behind everything so word is visible immediately
+    const baseText = document.createElementNS(NS, 'text');
+    baseText.setAttribute('x', 0);
+    baseText.setAttribute('y', baseline);
+    baseText.setAttribute('font-family', "'Libre Caslon Display', serif");
+    baseText.setAttribute('font-size', fontSize);
+    baseText.setAttribute('font-weight', 'normal');
+    baseText.setAttribute('fill', '#f5f5f0');
+    baseText.textContent = 'possible.';
+    // Insert as first child so it's behind dot layers
+    svg.insertBefore(baseText, svg.firstChild.nextSibling);
+
+    // Replace text with SVG
+    container.textContent = '';
+    container.appendChild(svg);
+
+    // Animation loop
+    const redDots = allDots.filter(d => d.layer === 0);
+    const whiteDots = allDots.filter(d => d.layer === 1);
+
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function animateDots(dots, startTime, onComplete) {
+      function tick(now) {
+        let allDone = true;
+        for (const dot of dots) {
+          const delay = dot.letterIndex * LETTER_STAGGER;
+          const elapsed = now - startTime - delay;
+          if (elapsed < 0) {
+            allDone = false;
+            continue;
+          }
+          const t = Math.min(elapsed / (FILL_DURATION / 3), 1);
+          const r = easeOutCubic(t) * DOT_RADIUS;
+          dot.el.setAttribute('r', r);
+          if (t < 1) allDone = false;
+        }
+        if (!allDone) {
+          requestAnimationFrame(tick);
+        } else if (onComplete) {
+          onComplete();
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function resetDots(dots) {
+      for (const dot of dots) {
+        dot.el.setAttribute('r', 0);
+      }
+    }
+
+    function cycle() {
+      // Phase 1: red fills in
+      resetDots(whiteDots);
+      animateDots(redDots, performance.now(), () => {
+        // Hold red
+        setTimeout(() => {
+          // Phase 2: white covers red
+          animateDots(whiteDots, performance.now(), () => {
+            // Hold white, then restart
+            setTimeout(cycle, HOLD_DURATION);
+          });
+        }, HOLD_DURATION);
+      });
+    }
+
+    // Start after a short delay
+    setTimeout(cycle, 1000);
+  }
+
+  // Wait for fonts to load
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(build);
+  } else {
+    window.addEventListener('load', build);
+  }
+})();
+============================================ */
 </script>
 </body>
 </html>
