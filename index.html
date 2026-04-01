@@ -1665,9 +1665,9 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
   const DEEP = {
     count: 625,
     connectionDist: 0,
-    mouseRadius: 225,
-    mouseForce: 0.01125,
-    damping: 0.94,
+    mouseRadius: 180,
+    mouseForce: 0.002,
+    damping: 0.92,
     rMin: 1.2, rMax: 2.8, // fallback, overridden by tiers
     opMin: 0.25, opMax: 0.5,
     speed: 0.002,
@@ -1686,6 +1686,8 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     ],
     redChance: 0,
     maxRed: 0,
+    ambientChance: 0.06,
+    maxAmbient: 20,
   };
 
   // Mid layer: medium density, slow drift — atmosphere
@@ -1708,6 +1710,8 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     ],
     redChance: 0,
     maxRed: 0,
+    ambientChance: 0.06,
+    maxAmbient: 10,
   };
 
   // Front layer: fewer, bigger, brighter, reactive — foreground
@@ -1731,15 +1735,24 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     ],
     redChance: 0.12,
     maxRed: 6,
+    ambientChance: 0.08,
+    maxAmbient: 8,
   };
 
   const RED = { r: 255, g: 85, b: 68 }; // matches --red #ff5544
+  const GOLD = { r: 196, g: 150, b: 42 };      // Antique gold #C4962A
+  const CELADON = { r: 123, g: 167, b: 153 };   // Celadon #7BA799
+  const AMBIENT_COLORS = [GOLD, CELADON];
 
   let deepParticles = [];
   let backParticles = [];
   let frontParticles = [];
   mouse = { x: -1000, y: -1000 };
   let tick = 0; // global frame counter for ebb/flow
+
+  // Inactivity tracking
+  let lastMouseMoveFrame = 0;
+  let staleMouse = { x: -1000, y: -1000 }; // where the mouse stopped
 
   function ease(t) {
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
@@ -1788,6 +1801,12 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
         ebY: Math.random() * Math.PI * 2,
         ebFreq: 0.003 + Math.random() * 0.004,  // slow, varied per particle
         ebAmp: 0.015 + Math.random() * 0.02,
+        // Ambient color (gold/celadon) for peripheral areas
+        ambientAmount: 0,
+        ambientTarget: 0,
+        ambientSpeed: 0,
+        ambientTimer: Math.random() * 200 + 60,
+        ambientColor: AMBIENT_COLORS[Math.floor(Math.random() * AMBIENT_COLORS.length)],
       });
     }
     return arr;
@@ -1802,6 +1821,12 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
   function countRed(arr) {
     let c = 0;
     for (const p of arr) { if (p.redTarget > 0.3) c++; }
+    return c;
+  }
+
+  function countAmbient(arr) {
+    let c = 0;
+    for (const p of arr) { if (p.ambientTarget > 0.3) c++; }
     return c;
   }
 
@@ -1824,6 +1849,32 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
         const ebStrength = (200 - dist) / 200;
         p.vx += Math.sin(tick * p.ebFreq + p.ebX) * p.ebAmp * ebStrength;
         p.vy += Math.cos(tick * p.ebFreq + p.ebY) * p.ebAmp * ebStrength;
+      }
+
+      // --- Inactivity dispersion ---
+      const idleFrames = tick - lastMouseMoveFrame;
+
+      // 1) Global: gentle random drift after ~2s (120 frames) of no movement
+      //    Ramps up slowly over ~10s, capped very low so it's just a slow exhale
+      if (idleFrames > 120) {
+        const globalStrength = Math.min((idleFrames - 120) / 300, 1) * 0.004 * cfg.speed;
+        p.vx += Math.sin(tick * 0.001 + p.ebX * 3.7) * globalStrength;
+        p.vy += Math.cos(tick * 0.001 + p.ebY * 3.7) * globalStrength;
+      }
+
+      // 2) Local: repel from stale mouse cluster after ~3s (180 frames)
+      //    Only affects particles that gathered near where the mouse stopped
+      if (idleFrames > 180 && staleMouse.x > -500) {
+        const sdx = p.x - staleMouse.x;
+        const sdy = p.y - staleMouse.y;
+        const sDist = Math.sqrt(sdx * sdx + sdy * sdy);
+        const disperseRadius = cfg.mouseRadius * 1.2;
+        if (sDist < disperseRadius && sDist > 0) {
+          const localStrength = Math.min((idleFrames - 180) / 400, 1) * 0.002;
+          const falloff = (disperseRadius - sDist) / disperseRadius;
+          p.vx += (sdx / sDist) * localStrength * falloff;
+          p.vy += (sdy / sDist) * localStrength * falloff;
+        }
       }
 
       p.vx *= cfg.damping;
@@ -1862,15 +1913,55 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
         t = ease(p.redAmount);
       }
 
-      // Interpolate color
-      const cr = Math.round(p.baseColor.r + (RED.r - p.baseColor.r) * t);
-      const cg = Math.round(p.baseColor.g + (RED.g - p.baseColor.g) * t);
-      const cb = Math.round(p.baseColor.b + (RED.b - p.baseColor.b) * t);
-      const op = p.opacity + t * 0.3;
+      // Ambient color logic (gold/celadon — peripheral, away from mouse)
+      let a = 0;
+      if (cfg.maxAmbient > 0) {
+        const farFromMouse = dist > cfg.mouseRadius || mouse.x < -500;
+        p.ambientTimer--;
+        if (p.ambientTimer <= 0) {
+          if (p.ambientTarget > 0.3) {
+            p.ambientTarget = 0;
+            p.ambientSpeed = 0.001 + Math.random() * 0.002;
+            p.ambientTimer = Math.random() * 400 + 200;
+          } else if (countAmbient(arr) < cfg.maxAmbient && farFromMouse) {
+            p.ambientTarget = 0.7 + Math.random() * 0.3;
+            p.ambientSpeed = 0.003 + Math.random() * 0.004;
+            p.ambientTimer = Math.random() * 300 + 150;
+            p.ambientColor = AMBIENT_COLORS[Math.floor(Math.random() * AMBIENT_COLORS.length)];
+          } else {
+            p.ambientTimer = Math.random() * 300 + 100;
+          }
+        }
+        // Fade out when mouse approaches
+        if (!farFromMouse && p.ambientTarget > 0) {
+          p.ambientTarget = 0;
+          p.ambientSpeed = 0.004;
+        }
+        if (p.ambientAmount < p.ambientTarget) {
+          p.ambientAmount = Math.min(p.ambientAmount + p.ambientSpeed, p.ambientTarget);
+        } else if (p.ambientAmount > p.ambientTarget) {
+          p.ambientAmount = Math.max(p.ambientAmount - p.ambientSpeed, p.ambientTarget);
+        }
+        a = ease(p.ambientAmount);
+      }
+
+      // Interpolate color — red near mouse, ambient colors peripherally
+      let cr, cg, cb;
+      const blend = Math.max(t, a);
+      if (t >= a) {
+        cr = Math.round(p.baseColor.r + (RED.r - p.baseColor.r) * t);
+        cg = Math.round(p.baseColor.g + (RED.g - p.baseColor.g) * t);
+        cb = Math.round(p.baseColor.b + (RED.b - p.baseColor.b) * t);
+      } else {
+        cr = Math.round(p.baseColor.r + (p.ambientColor.r - p.baseColor.r) * a);
+        cg = Math.round(p.baseColor.g + (p.ambientColor.g - p.baseColor.g) * a);
+        cb = Math.round(p.baseColor.b + (p.ambientColor.b - p.baseColor.b) * a);
+      }
+      const op = p.opacity + blend * 0.5;
 
       // Draw particle
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r + t * 0.8, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.r + blend * 0.8, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${op})`;
       ctx.fill();
 
@@ -1884,9 +1975,18 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
         if (cdist < cfg.connectionDist) {
           const alpha = (1 - cdist / cfg.connectionDist) * cfg.lineAlpha;
           const maxRed = Math.max(t, ease(p2.redAmount));
-          const lr = Math.round(p.baseColor.r + (RED.r - p.baseColor.r) * maxRed * 0.5);
-          const lg = Math.round(p.baseColor.g + (RED.g - p.baseColor.g) * maxRed * 0.5);
-          const lb = Math.round(p.baseColor.b + (RED.b - p.baseColor.b) * maxRed * 0.5);
+          const maxAmb = Math.max(a, ease(p2.ambientAmount));
+          let lr, lg, lb;
+          if (maxRed >= maxAmb) {
+            lr = Math.round(p.baseColor.r + (RED.r - p.baseColor.r) * maxRed * 0.5);
+            lg = Math.round(p.baseColor.g + (RED.g - p.baseColor.g) * maxRed * 0.5);
+            lb = Math.round(p.baseColor.b + (RED.b - p.baseColor.b) * maxRed * 0.5);
+          } else {
+            const ac = p.ambientColor;
+            lr = Math.round(p.baseColor.r + (ac.r - p.baseColor.r) * maxAmb * 0.5);
+            lg = Math.round(p.baseColor.g + (ac.g - p.baseColor.g) * maxAmb * 0.5);
+            lb = Math.round(p.baseColor.b + (ac.b - p.baseColor.b) * maxAmb * 0.5);
+          }
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(p2.x, p2.y);
@@ -1940,6 +2040,9 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     const m = screenToCanvas(e.clientX, e.clientY);
     mouse.x = m.x;
     mouse.y = m.y;
+    staleMouse.x = m.x;
+    staleMouse.y = m.y;
+    lastMouseMoveFrame = tick;
   });
   heroEl.addEventListener('mouseleave', () => {
     mouse.x = -1000;
