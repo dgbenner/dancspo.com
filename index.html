@@ -366,12 +366,8 @@ nav {
   height: 47px;
   width: auto;
   opacity: 0.7;
-  filter: grayscale(1) brightness(2);
-  transition: opacity 0.2s;
+  filter: none;
   flex-shrink: 0;
-}
-.logo-track img:hover {
-  opacity: 1;
 }
 /* Fade edges for seamless feel */
 .logo-carousel::before,
@@ -393,7 +389,7 @@ nav {
 }
 @keyframes scrollLogos {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(-33.333%); }
 }
 
 /* ============================================
@@ -918,43 +914,83 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
      ============================================ -->
 <div class="logo-carousel">
   <div class="logo-track">
+    <img src="images/logos/abbott.svg" alt="Abbott" style="height:35px">
     <img src="images/logos/bestbuy.svg" alt="Best Buy">
-    <img src="images/logos/bp.svg" alt="bp">
+    <img src="images/logos/bp.svg" alt="BP">
+    <img src="images/logos/capella.svg" alt="Capella">
+    <img src="images/logos/cenex.svg" alt="CenEx">
     <img src="images/logos/chs.svg" alt="CHS">
+    <img src="images/logos/coach.svg" alt="Coach" style="height:42px">
+    <img src="images/logos/dominion.svg" alt="Dominion Energy">
     <img src="images/logos/ey.svg" alt="EY">
-    <img src="images/logos/intuitivesurgical.svg" alt="Intuitive Surgical">
-    <img src="images/logos/kudo.svg" alt="KUDO">
-    <img src="images/logos/pointclickcare.svg" alt="PointClickCare">
-    <img src="images/logos/walmart.svg" alt="Walmart">
-    <img src="images/logos/coach.svg" alt="Coach">
+    <img src="images/logos/greenway.svg" alt="Greenway Health">
+    <img src="images/logos/hp.svg" alt="HP">
     <img src="images/logos/intel.svg" alt="Intel">
-    <img src="images/logos/microsoft.svg" alt="Microsoft">
-    <img src="images/logos/cocacola.svg" alt="Coca-Cola">
-    <img src="images/logos/hewlett packard.svg" alt="Hewlett Packard">
-    <img src="images/logos/3m.svg" alt="3M">
-    <img src="images/logos/comcast.svg" alt="Comcast">
-    <img src="images/logos/abbott.svg" alt="Abbott">
-    <img src="images/logos/kaiser.svg" alt="Kaiser">
+    <img src="images/logos/kaiser.svg" alt="Kaiser Permanente">
+    <img src="images/logos/kudo.svg" alt="KUDO">
     <img src="images/logos/metlife.svg" alt="MetLife">
+    <img src="images/logos/microsoft.svg" alt="Microsoft">
+    <img src="images/logos/nationwide.svg" alt="Nationwide">
+    <img src="images/logos/patterson.svg" alt="Patterson">
+    <img src="images/logos/publix.svg" alt="Publix">
+    <img src="images/logos/suez.svg" alt="Suez">
+    <img src="images/logos/uschamber.svg" alt="U.S. Chamber of Commerce">
+    <img src="images/logos/usda.svg" alt="USDA">
+    <img src="images/logos/usdeptofenergy.svg" alt="U.S. Dept of Energy">
+    <img src="images/logos/usdhhs.svg" alt="U.S. DHHS">
+    <img src="images/logos/ussocialsecurity.svg" alt="U.S. Social Security" style="height:35px">
     <!-- Duplicate for seamless loop -->
+    <img src="images/logos/abbott.svg" alt="Abbott" style="height:35px">
     <img src="images/logos/bestbuy.svg" alt="Best Buy">
-    <img src="images/logos/bp.svg" alt="bp">
+    <img src="images/logos/bp.svg" alt="BP">
+    <img src="images/logos/capella.svg" alt="Capella">
+    <img src="images/logos/cenex.svg" alt="CenEx">
     <img src="images/logos/chs.svg" alt="CHS">
+    <img src="images/logos/coach.svg" alt="Coach" style="height:42px">
+    <img src="images/logos/dominion.svg" alt="Dominion Energy">
     <img src="images/logos/ey.svg" alt="EY">
-    <img src="images/logos/intuitivesurgical.svg" alt="Intuitive Surgical">
-    <img src="images/logos/kudo.svg" alt="KUDO">
-    <img src="images/logos/pointclickcare.svg" alt="PointClickCare">
-    <img src="images/logos/walmart.svg" alt="Walmart">
-    <img src="images/logos/coach.svg" alt="Coach">
+    <img src="images/logos/greenway.svg" alt="Greenway Health">
+    <img src="images/logos/hp.svg" alt="HP">
     <img src="images/logos/intel.svg" alt="Intel">
-    <img src="images/logos/microsoft.svg" alt="Microsoft">
-    <img src="images/logos/cocacola.svg" alt="Coca-Cola">
-    <img src="images/logos/hewlett packard.svg" alt="Hewlett Packard">
-    <img src="images/logos/3m.svg" alt="3M">
-    <img src="images/logos/comcast.svg" alt="Comcast">
-    <img src="images/logos/abbott.svg" alt="Abbott">
-    <img src="images/logos/kaiser.svg" alt="Kaiser">
+    <img src="images/logos/kaiser.svg" alt="Kaiser Permanente">
+    <img src="images/logos/kudo.svg" alt="KUDO">
     <img src="images/logos/metlife.svg" alt="MetLife">
+    <img src="images/logos/microsoft.svg" alt="Microsoft">
+    <img src="images/logos/nationwide.svg" alt="Nationwide">
+    <img src="images/logos/patterson.svg" alt="Patterson">
+    <img src="images/logos/publix.svg" alt="Publix">
+    <img src="images/logos/suez.svg" alt="Suez">
+    <img src="images/logos/uschamber.svg" alt="U.S. Chamber of Commerce">
+    <img src="images/logos/usda.svg" alt="USDA">
+    <img src="images/logos/usdeptofenergy.svg" alt="U.S. Dept of Energy">
+    <img src="images/logos/usdhhs.svg" alt="U.S. DHHS">
+    <img src="images/logos/ussocialsecurity.svg" alt="U.S. Social Security" style="height:35px">
+    <!-- Third set for smoother loop -->
+    <img src="images/logos/abbott.svg" alt="Abbott" style="height:35px">
+    <img src="images/logos/bestbuy.svg" alt="Best Buy">
+    <img src="images/logos/bp.svg" alt="BP">
+    <img src="images/logos/capella.svg" alt="Capella">
+    <img src="images/logos/cenex.svg" alt="CenEx">
+    <img src="images/logos/chs.svg" alt="CHS">
+    <img src="images/logos/coach.svg" alt="Coach" style="height:42px">
+    <img src="images/logos/dominion.svg" alt="Dominion Energy">
+    <img src="images/logos/ey.svg" alt="EY">
+    <img src="images/logos/greenway.svg" alt="Greenway Health">
+    <img src="images/logos/hp.svg" alt="HP">
+    <img src="images/logos/intel.svg" alt="Intel">
+    <img src="images/logos/kaiser.svg" alt="Kaiser Permanente">
+    <img src="images/logos/kudo.svg" alt="KUDO">
+    <img src="images/logos/metlife.svg" alt="MetLife">
+    <img src="images/logos/microsoft.svg" alt="Microsoft">
+    <img src="images/logos/nationwide.svg" alt="Nationwide">
+    <img src="images/logos/patterson.svg" alt="Patterson">
+    <img src="images/logos/publix.svg" alt="Publix">
+    <img src="images/logos/suez.svg" alt="Suez">
+    <img src="images/logos/uschamber.svg" alt="U.S. Chamber of Commerce">
+    <img src="images/logos/usda.svg" alt="USDA">
+    <img src="images/logos/usdeptofenergy.svg" alt="U.S. Dept of Energy">
+    <img src="images/logos/usdhhs.svg" alt="U.S. DHHS">
+    <img src="images/logos/ussocialsecurity.svg" alt="U.S. Social Security" style="height:35px">
   </div>
 </div>
 
@@ -983,7 +1019,7 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
             <button class="seg-btn" data-seg="prd" data-project="bestbuy">PRD</button>
           </div>
           <div class="seg-panel active" id="seg-narrative-bestbuy">
-            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">Customers arriving at service with no clear self-triage path, creating friction and misrouted cases.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">Customers arriving at service with no way to self-triage — leading to misrouted cases, unnecessary friction, and high call volume.</p></div>
             <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">The repair-or-replace decision was already happening in the customer's head — but nobody was giving them the information to make it. Showing device value, trade-in value, and new device pricing within the same flow would have turned a support interaction into a conversion moment, serving both the customer and the business simultaneously. The opportunity was dismissed during design. Unmoderated testing surfaced it as a real user need — research I conducted and used to make the case.</p></div>
             <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">An AI-assisted front end that reduced misrouting and created a feedback loop for service quality.</p></div>
           </div>

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="105px" height="49px" viewBox="0 0 105 49" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="105px" height="48px" viewBox="0 0 105 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
     <title>Group 49</title>
     <desc>Created with Sketch.</desc>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="02-About" transform="translate(-970.000000, -3355.000000)">
-            <g id="Group-49" transform="translate(970.000000, 3355.500000)">
-                <rect id="Rectangle-Copy-34" fill="#FFFFFF" x="0" y="0" width="105" height="48"></rect>
-                <g id="Group-6" transform="translate(9.812294, 13.068920)" fill="#4B4B4B">
+        <g id="03-Navigation-Copy-2" transform="translate(-1296.000000, -1079.000000)">
+            <g id="Group-49" transform="translate(1296.000000, 1079.000000)">
+                <g id="Group-6" transform="translate(9.812294, 13.068920)" fill="#969696">
                     <polygon id="Fill-1-Copy" points="56.3453493 18.6588009 59.5703222 18.6588009 59.5703222 0.78189804 56.3453493 0.78189804"></polygon>
                     <polygon id="Fill-2-Copy" points="66.1170375 18.6588009 69.3501594 18.6588009 69.3501594 5.38201731 66.1170375 5.38201731"></polygon>
                     <path d="M80.4670464,15.0575472 C79.4015626,17.1273971 78.5601768,18.7093248 78.5123013,18.7093248 L75.1589814,18.7093248 L78.5785121,11.9639772 L74.5956807,5.41216867 L78.0936457,5.41216867 L80.1471976,8.82966206 L81.8696957,5.41216867 L85.3646048,5.41216867 C85.3646048,5.41216867 83.7215595,8.70538957 82.0387878,12.0037036 L86.0654201,18.7093248 L82.7080257,18.7093248 L80.4670464,15.0575472 Z" id="Fill-3-Copy"></path>
