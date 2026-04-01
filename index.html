@@ -88,6 +88,8 @@ nav {
   z-index: 100;
   background: var(--bg);
   padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 1px 16px rgba(255, 255, 255, 0.02);
 }
 .nav-inner {
   max-width: 1200px;
@@ -262,6 +264,8 @@ nav {
   text-transform: uppercase;
   letter-spacing: 3px;
   margin-bottom: 24px;
+  user-select: none;
+  cursor: default;
 }
 .hero-headline {
   font-family: 'Libre Caslon Display', var(--serif);
@@ -272,6 +276,8 @@ nav {
   margin-top: 12px;
   margin-bottom: 32px;
   text-shadow: 0 0 40px rgba(26, 26, 26, 1), 0 0 80px rgba(26, 26, 26, 1), 0 0 120px rgba(26, 26, 26, 1);
+  user-select: none;
+  cursor: default;
 }
 .hero-headline span { display: block; }
 /* .hero-possible {
@@ -289,6 +295,8 @@ nav {
   line-height: 1.7;
   max-width: 540px;
   margin-bottom: 32px;
+  user-select: none;
+  cursor: default;
 }
 .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
 .btn {
@@ -634,6 +642,8 @@ nav {
   padding: 28px;
   width: 340px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
 }
 .endorsement-quote {
   font-family: var(--sans);
@@ -641,6 +651,7 @@ nav {
   color: var(--white);
   line-height: 1.7;
   margin-bottom: 20px;
+  min-height: calc(15px * 1.7 * 3); /* 3 lines baseline */
 }
 .endorsement-attribution {
   font-family: 'Orbitron', var(--sans);
@@ -652,7 +663,7 @@ nav {
 }
 @keyframes scrollEndorsements {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(-33.333%); }
 }
 
 /* ============================================
@@ -677,12 +688,16 @@ nav {
   line-height: 1;
   position: sticky;
   top: 100px;
+  user-select: none;
+  cursor: default;
 }
 .about-name {
   font-family: 'Libre Caslon Display', var(--serif);
   font-size: 40px;
   color: var(--white);
   margin-bottom: 8px;
+  user-select: none;
+  cursor: default;
 }
 .about-role {
   font-family: 'Orbitron', var(--sans);
@@ -692,11 +707,15 @@ nav {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 28px;
+  user-select: none;
+  cursor: default;
 }
 .about-text {
   font-size: 16px;
   color: var(--cream);
   line-height: 1.7;
+  user-select: none;
+  cursor: default;
   margin-bottom: 20px;
 }
 .about-contact {
@@ -1479,6 +1498,29 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 
     <div class="endorsement-card"><p class="endorsement-quote">"Dan is insightful and diligent on making sure that the user comes first in everything he touches."</p><div class="endorsement-attribution">Mike Kirk · Creative Director · BI Worldwide</div></div>
 
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's insight, direction, sense of urgency, and long-term vision was invaluable."</p><div class="endorsement-attribution">Sarah Ailabouni · Senior Manager, Tech Transformation · Best Buy</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan has a vast and understanding mindset."</p><div class="endorsement-attribution">Gaurav Vyas · UX Engineer · Timex Group</div></div>
+    <!-- Third set for smoother loop -->
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's grasp of web development and trends has really allowed us to push the envelope."</p><div class="endorsement-attribution">Zach Kahn · CTO + Product Manager · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is always thinking outside the box and bringing fresh, creative ideas."</p><div class="endorsement-attribution">Clive Vang · UI/UX Designer · Truist</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"We had 'Microsoft', and Dan gave us 'Apple'."</p><div class="endorsement-attribution">Karen Larsen · Project Manager · Larsen Solutions</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"I sing Dan's praises as often and loudly as I can."</p><div class="endorsement-attribution">Brad Elhert · Director of Business Development · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Do yourself a favor — hire Dan, and you can thank me later!"</p><div class="endorsement-attribution">Steve Brophy · Creative Director · Davis + Co</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan knocks it out of the park. He's flat-out terrific."</p><div class="endorsement-attribution">Hugh MacNiven · Director of Learning Strategy · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan has done absolutely the best analysis for our product!"</p><div class="endorsement-attribution">Claudio Fantinuoli, PhD · Head of Innovation · KUDO Inc</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"90% of where our platform is today is due to Dan's vision."</p><div class="endorsement-attribution">Zach Kahn · CTO + Product Manager · BI Worldwide</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"I would work with Dan again in a heartbeat."</p><div class="endorsement-attribution">Eric Lee · Software Engineer · Hulu</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's improvements only require 20% effort to implement, but have an 80% impact."</p><div class="endorsement-attribution">Russ Conser · CEO · Blue Nest Beef</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"His research gave us the needed step to move us forward."</p><div class="endorsement-attribution">Melanie Rassmussen · Implementation Director · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan does 'Class A' work."</p><div class="endorsement-attribution">Steve Beier · Product Portfolio Executive · DroneUp + IBM Alum</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"We've had countless agencies do research for us, but Dan is the only one who told us 'the why' of what our users are thinking and doing."</p><div class="endorsement-attribution">Sherry Martin · Director of Digital Strategies and Solutions · EY</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"He is a rare combination of strategic thinking, strong craft and a genuine empathy for users."</p><div class="endorsement-attribution">Hanna Helouin · Product Designer · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan has done phenomenal work for our E-Commerce Platform. He's irreplaceable!"</p><div class="endorsement-attribution">Joshua Rapp · Director of Experience · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is the deadly combo of User Experience and Product Management. It's insane."</p><div class="endorsement-attribution">Tirath Chhatriwala · Product Manager, Mobile Commerce · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"In 'professional environments', not everyone is always professional. Dan IS always a professional!"</p><div class="endorsement-attribution">Steve Beier · Product Portfolio Executive · DroneUp + IBM Alum</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"No one seems to know where our product needs to go more than Dan."</p><div class="endorsement-attribution">Michael Brummett · Creative Director · Stealth AI Startup</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan's ability to adapt to evolving projects and stay focused on customers' needs sets him apart."</p><div class="endorsement-attribution">Jonathan Owen · Product Vision Executive · DroneUp</div></div>
+    <div class="endorsement-card"><p class="endorsement-quote">"Dan is insightful and diligent on making sure that the user comes first in everything he touches."</p><div class="endorsement-attribution">Mike Kirk · Creative Director · BI Worldwide</div></div>
     <div class="endorsement-card"><p class="endorsement-quote">"Dan's insight, direction, sense of urgency, and long-term vision was invaluable."</p><div class="endorsement-attribution">Sarah Ailabouni · Senior Manager, Tech Transformation · Best Buy</div></div>
     <div class="endorsement-card"><p class="endorsement-quote">"Dan has a vast and understanding mindset."</p><div class="endorsement-attribution">Gaurav Vyas · UX Engineer · Timex Group</div></div>
   </div>
