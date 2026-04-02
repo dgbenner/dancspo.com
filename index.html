@@ -641,6 +641,7 @@ nav {
   border-radius: var(--radius);
   padding: 28px;
   width: 340px;
+  height: 180px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -664,6 +665,52 @@ nav {
 @keyframes scrollEndorsements {
   0% { transform: translateX(0); }
   100% { transform: translateX(-33.333%); }
+}
+.endorsement-track { transition: opacity 0.4s ease; }
+.anti-endorsement-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: scrollEndorsements 120s linear infinite;
+  transition: opacity 0.4s ease;
+}
+.endorsements.anti .endorsement-track { display: none; }
+.anti-endorsement-track { display: none; }
+.endorsements.anti .anti-endorsement-track { display: flex; }
+.endorsements.anti .endorsements-heading {
+  color: var(--red);
+  opacity: 0.8;
+  cursor: pointer;
+}
+.endorsements.anti .endorsements-heading:hover { opacity: 1; }
+.anti-subtitle {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 400;
+  color: #fff;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  opacity: 1;
+}
+.anti-endorsement-card {
+  background: #a41608;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  padding: 28px;
+  width: 340px;
+  height: 180px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+.anti-endorsement-card .endorsement-quote {
+  color: #fff;
+  min-height: calc(15px * 1.7 * 3);
+  margin-bottom: 20px;
+}
+.anti-endorsement-card .endorsement-attribution {
+  color: #fff;
+  margin-top: auto;
 }
 
 /* ============================================
@@ -1557,6 +1604,104 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
     <div class="endorsement-card"><p class="endorsement-quote">"Dan's insight, direction, sense of urgency, and long-term vision was invaluable."</p><div class="endorsement-attribution">Sarah Ailabouni · Senior Manager, Tech Transformation · Best Buy</div></div>
     <div class="endorsement-card"><p class="endorsement-quote">"Dan has a vast and understanding mindset."</p><div class="endorsement-attribution">Gaurav Vyas · UX Engineer · Timex Group</div></div>
   </div>
+  <div class="anti-endorsement-track">
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan has a tendency to side with users in discussions, even when it conflicts with product vision."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He introduces a lot of questions at the beginning of projects. It can delay momentum."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan kept asking if we had data to support decisions. We prefer to move quickly based on instinct."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He pushes back on decisions that seem obvious to the team. It can create friction."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan doesn't always align with leadership priorities. He tends to reframe things around the user."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He focuses a lot on usability details. We're more focused on the bigger picture."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan sometimes struggles to fully buy into the product philosophy."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He prefers to test and iterate before committing. We're more comfortable making bold decisions early."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan asks a lot of questions. It's over-analysis when we can just copy this other app."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He tends to slow things down to make sure we're building the right thing. We're trying to move fast."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan doesn't always go along with group decisions if he feels they're not user-centered. And that's not a team attitude."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He often expands the scope to include research or validation steps. We don't have budget to talk to users."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He brings conversations back to users when we're trying to focus on internal goals."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan revisits topics like research and usability multiple times, even after we've moved on."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He measures success in terms of user clarity and experience. We look at our new clients we signed. That's proof."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan sometimes wants to do wireframes, because he says it's the interaction model. Who still uses Axure?"</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Tell me why we need to do research again?"</p><div class="endorsement-attribution">Director of UX · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"It's been six months of user testing, so maybe we should reevaluate if research helps us or not."</p><div class="endorsement-attribution">Director of UX · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He suggested we look at the data for a few minutes. We don't need to be moving around Post-it notes for two weeks."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan said he works for the user. He has a lot to learn about org charts and who signs his checks."</p><div class="endorsement-attribution">VP of Product · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"We don't need to do user testing. Somebody told me the other day how much they liked the app."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"I told him not to say the word research to the CTO. And he did. And showed him a report."</p><div class="endorsement-attribution">VP of Product · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"I don't know why he wanted to make toast messages. We all just wanted to make the screen really bright so people knew something was different."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He was arguing a point the whole team disagreed with. It was really rude. And I told him so."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He overthinks things."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"We just need to speak about the product with more confidence. Not more UI designs."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He said he'd put on an orange vest, get a clipboard and go to Walmart. We can't ask the client to ok that."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"If we ask clients for feedback loops, we're admitting our product is broken."</p><div class="endorsement-attribution">VP of Product · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"If people don't want to figure out our app, then we won't reward them."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"We don't want everyone in the app. Just the right people."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan kept asking what the user gets out of the first five minutes. That's not really how this product works."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan has a tendency to side with users in discussions, even when it conflicts with product vision."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He introduces a lot of questions at the beginning of projects. It can delay momentum."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan kept asking if we had data to support decisions. We prefer to move quickly based on instinct."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He pushes back on decisions that seem obvious to the team. It can create friction."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan doesn't always align with leadership priorities. He tends to reframe things around the user."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He focuses a lot on usability details. We're more focused on the bigger picture."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan sometimes struggles to fully buy into the product philosophy."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He prefers to test and iterate before committing. We're more comfortable making bold decisions early."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan asks a lot of questions. It's over-analysis when we can just copy this other app."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He tends to slow things down to make sure we're building the right thing. We're trying to move fast."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan doesn't always go along with group decisions if he feels they're not user-centered. And that's not a team attitude."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He often expands the scope to include research or validation steps. We don't have budget to talk to users."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He brings conversations back to users when we're trying to focus on internal goals."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan revisits topics like research and usability multiple times, even after we've moved on."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He measures success in terms of user clarity and experience. We look at our new clients we signed. That's proof."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan sometimes wants to do wireframes, because he says it's the interaction model. Who still uses Axure?"</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Tell me why we need to do research again?"</p><div class="endorsement-attribution">Director of UX · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"It's been six months of user testing, so maybe we should reevaluate if research helps us or not."</p><div class="endorsement-attribution">Director of UX · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He suggested we look at the data for a few minutes. We don't need to be moving around Post-it notes for two weeks."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan said he works for the user. He has a lot to learn about org charts and who signs his checks."</p><div class="endorsement-attribution">VP of Product · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"We don't need to do user testing. Somebody told me the other day how much they liked the app."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"I told him not to say the word research to the CTO. And he did. And showed him a report."</p><div class="endorsement-attribution">VP of Product · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"I don't know why he wanted to make toast messages. We all just wanted to make the screen really bright so people knew something was different."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He was arguing a point the whole team disagreed with. It was really rude. And I told him so."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He overthinks things."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"We just need to speak about the product with more confidence. Not more UI designs."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He said he'd put on an orange vest, get a clipboard and go to Walmart. We can't ask the client to ok that."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"If we ask clients for feedback loops, we're admitting our product is broken."</p><div class="endorsement-attribution">VP of Product · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"If people don't want to figure out our app, then we won't reward them."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"We don't want everyone in the app. Just the right people."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan kept asking what the user gets out of the first five minutes. That's not really how this product works."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan has a tendency to side with users in discussions, even when it conflicts with product vision."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He introduces a lot of questions at the beginning of projects. It can delay momentum."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan kept asking if we had data to support decisions. We prefer to move quickly based on instinct."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He pushes back on decisions that seem obvious to the team. It can create friction."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan doesn't always align with leadership priorities. He tends to reframe things around the user."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He focuses a lot on usability details. We're more focused on the bigger picture."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan sometimes struggles to fully buy into the product philosophy."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He prefers to test and iterate before committing. We're more comfortable making bold decisions early."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan asks a lot of questions. It's over-analysis when we can just copy this other app."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He tends to slow things down to make sure we're building the right thing. We're trying to move fast."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan doesn't always go along with group decisions if he feels they're not user-centered. And that's not a team attitude."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He often expands the scope to include research or validation steps. We don't have budget to talk to users."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He brings conversations back to users when we're trying to focus on internal goals."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan revisits topics like research and usability multiple times, even after we've moved on."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He measures success in terms of user clarity and experience. We look at our new clients we signed. That's proof."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan sometimes wants to do wireframes, because he says it's the interaction model. Who still uses Axure?"</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Tell me why we need to do research again?"</p><div class="endorsement-attribution">Director of UX · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"It's been six months of user testing, so maybe we should reevaluate if research helps us or not."</p><div class="endorsement-attribution">Director of UX · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He suggested we look at the data for a few minutes. We don't need to be moving around Post-it notes for two weeks."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan said he works for the user. He has a lot to learn about org charts and who signs his checks."</p><div class="endorsement-attribution">VP of Product · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"We don't need to do user testing. Somebody told me the other day how much they liked the app."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"I told him not to say the word research to the CTO. And he did. And showed him a report."</p><div class="endorsement-attribution">VP of Product · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"I don't know why he wanted to make toast messages. We all just wanted to make the screen really bright so people knew something was different."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He was arguing a point the whole team disagreed with. It was really rude. And I told him so."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He overthinks things."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"We just need to speak about the product with more confidence. Not more UI designs."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"He said he'd put on an orange vest, get a clipboard and go to Walmart. We can't ask the client to ok that."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"If we ask clients for feedback loops, we're admitting our product is broken."</p><div class="endorsement-attribution">VP of Product · Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"If people don't want to figure out our app, then we won't reward them."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"We don't want everyone in the app. Just the right people."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+    <div class="anti-endorsement-card"><p class="endorsement-quote">"Dan kept asking what the user gets out of the first five minutes. That's not really how this product works."</p><div class="endorsement-attribution">Name and company withheld</div></div>
+  </div>
 </section>
 
 <!-- ============================================
@@ -2243,6 +2388,21 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
   }
 })();
 ============================================ */
+
+// Anti-endorsements Easter egg toggle
+(() => {
+  const section = document.querySelector('.endorsements');
+  const heading = document.querySelector('.endorsements-heading');
+  if (!section || !heading) return;
+  heading.addEventListener('click', () => {
+    const isAnti = section.classList.toggle('anti');
+    if (isAnti) {
+      heading.innerHTML = 'Anti-Endorsements<br><span class="anti-subtitle">Based on true, horrifying stories.</span>';
+    } else {
+      heading.textContent = 'Endorsements';
+    }
+  });
+})();
 </script>
 </body>
 </html>
