@@ -277,12 +277,12 @@ nav {
 .hero-headline {
   font-family: 'Libre Caslon Display', var(--serif);
   font-size: clamp(43px, 6vw, 78px);
-  color: var(--cream);
+  color: var(--white);
   line-height: 1.1;
   letter-spacing: -1.5px;
   margin-top: 12px;
   margin-bottom: 32px;
-  /* text-shadow: 0 0 40px rgba(26, 26, 26, 1), 0 0 80px rgba(26, 26, 26, 1), 0 0 120px rgba(26, 26, 26, 1); */
+  text-shadow: 0 0 40px rgba(26, 26, 26, 1), 0 0 80px rgba(26, 26, 26, 1), 0 0 120px rgba(26, 26, 26, 1);
   user-select: none;
   cursor: default;
 }
@@ -357,15 +357,6 @@ nav {
   width: 100%;
   height: 100%;
   display: block;
-}
-#fragmentCanvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  pointer-events: none;
 }
 
 /* ============================================
@@ -985,7 +976,6 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
   </div>
   <div class="hero-canvas-fade"></div>
   <div class="hero-canvas-fade-right"></div>
-  <canvas id="fragmentCanvas"></canvas>
   <div class="container">
     <div class="hero-grid">
       <div class="hero-content">
@@ -1821,8 +1811,6 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
 (() => {
   const canvas = document.getElementById('heroCanvas');
   const ctx = canvas.getContext('2d');
-  const fragCanvas = document.getElementById('fragmentCanvas');
-  const fragCtx = fragCanvas ? fragCanvas.getContext('2d') : null;
   let width, height, particles, mouse;
 
   // ---- LAYER CONFIG ----
@@ -1919,17 +1907,6 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
   let lastMouseMoveFrame = 0;
   let staleMouse = { x: -1000, y: -1000 }; // where the mouse stopped
 
-  // ---- TEXT SHATTER SYSTEM ----
-  let textFragments = [];
-  let shatterPhase = 'dormant'; // dormant | shatter | hold | integrate | done
-  let shatterPhaseTick = 0;
-  let shatterInteraction = 0;
-  let shatterTriggered = false;
-  let shatterOffCanvas = null;
-  let shatterOffsetX = 0, shatterOffsetY = 0;
-  const SHATTER_TRIGGER = 300;  // 5s of interaction at 60fps
-  const SHATTER_ANIM = 18;      // ~300ms shatter burst
-  const SHATTER_HOLD = 30;      // ~0.5s hold then integration phase manages the choreography
 
   function ease(t) {
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
@@ -1945,13 +1922,6 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    if (fragCanvas) {
-      fragCanvas.width = width * dpr;
-      fragCanvas.height = height * dpr;
-      fragCanvas.style.width = width + 'px';
-      fragCanvas.style.height = height + 'px';
-      fragCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
   }
 
   function createLayer(cfg) {
@@ -2012,387 +1982,6 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     let c = 0;
     for (const p of arr) { if (p.ambientTarget > 0.3) c++; }
     return c;
-  }
-
-  // ---- TEXT SHATTER: build fragments from headline ----
-  function buildTextFragments() {
-    const el = document.querySelector('.hero-headline');
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const cRect = canvas.parentElement.getBoundingClientRect();
-    shatterOffsetX = rect.left - cRect.left + 1;
-    shatterOffsetY = rect.top - cRect.top + 1;
-
-    const dpr = window.devicePixelRatio || 1;
-    const off = document.createElement('canvas');
-    off.width = Math.ceil(rect.width * dpr);
-    off.height = Math.ceil(rect.height * dpr);
-    const oc = off.getContext('2d');
-    oc.scale(dpr, dpr);
-    oc.fillStyle = '#ede6d8';
-    oc.textBaseline = 'alphabetic';
-    // oc.shadowColor = 'rgba(26, 26, 26, 1)';
-    // oc.shadowBlur = 40;
-
-    // Draw text at proper baseline using font metrics
-    const spans = el.querySelectorAll('span');
-    spans.forEach(span => {
-      const sr = span.getBoundingClientRect();
-      const s = getComputedStyle(span);
-      const fontSize = parseFloat(s.fontSize);
-      oc.font = s.fontWeight + ' ' + fontSize + 'px ' + s.fontFamily;
-      if (oc.letterSpacing !== undefined) oc.letterSpacing = s.letterSpacing;
-      // Measure font metrics to find baseline position within the line box
-      var metrics = oc.measureText('Mg');
-      var ascent = metrics.fontBoundingBoxAscent || metrics.actualBoundingBoxAscent;
-      var descent = metrics.fontBoundingBoxDescent || metrics.actualBoundingBoxDescent;
-      var fontH = ascent + descent;
-      var lineH = sr.height;
-      // Baseline = ascent + half the extra space from line-height
-      var baselineY = (sr.top - rect.top) + ascent + (lineH - fontH) / 2;
-      oc.fillText(span.textContent, sr.left - rect.left, baselineY);
-    });
-
-    shatterOffCanvas = off;
-    textFragments = [];
-
-    // Create one fragment per letter, measured individually
-    spans.forEach(span => {
-      const sr = span.getBoundingClientRect();
-      const s = getComputedStyle(span);
-      const font = s.fontWeight + ' ' + parseFloat(s.fontSize) + 'px ' + s.fontFamily;
-      const fontSize = parseFloat(s.fontSize);
-      oc.font = font;
-      if (oc.letterSpacing !== undefined) oc.letterSpacing = s.letterSpacing;
-      // Use same font metrics for fragment positioning
-      var metrics = oc.measureText('Mg');
-      var ascent = metrics.fontBoundingBoxAscent || metrics.actualBoundingBoxAscent;
-      var descent = metrics.fontBoundingBoxDescent || metrics.actualBoundingBoxDescent;
-      var fontH = ascent + descent;
-      var lineH = sr.height;
-      var topPad = (lineH - fontH) / 2;
-      const baseX = sr.left - rect.left;
-      const baseY = sr.top - rect.top + topPad;
-
-      var text = span.textContent;
-      var curX = baseX;
-      for (var c = 0; c < text.length; c++) {
-        var ch = text[c];
-        var charW = oc.measureText(ch).width;
-        if (ch.trim() === '') { curX += charW; continue; } // skip spaces
-
-        var ax = curX + shatterOffsetX;
-        var ay = baseY + shatterOffsetY;
-        var bx = curX + charW + shatterOffsetX;
-        var by = baseY + fontH + shatterOffsetY;
-
-        textFragments.push(mkFrag([
-          {x: ax, y: ay}, {x: bx, y: ay},
-          {x: bx, y: by}, {x: ax, y: by}
-        ]));
-
-        curX += charW;
-      }
-    });
-
-    // Choreograph the timeline: spread letters across ~30s
-    // Shuffle order so it's not left-to-right
-    var indices = [];
-    for (var i = 0; i < textFragments.length; i++) indices.push(i);
-    // Fisher-Yates shuffle
-    for (var i = indices.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = indices[i]; indices[i] = indices[j]; indices[j] = tmp;
-    }
-    var total = textFragments.length;
-    for (var i = 0; i < total; i++) {
-      var f = textFragments[indices[i]];
-      var t = i / total; // 0 to 1
-      // Staged timeline (in frames at 60fps):
-      // t=0.00 (1st letter):    ~60  frames  = 1s
-      // t=0.03 (2nd letter):    ~300 frames  = 5s
-      // t=0.06 (3rd letter):    ~420 frames  = 7s
-      // t=0.10 (4th-5th):       ~480 frames  = 8s
-      // t=0.15 (6th-8th):       ~540 frames  = 9s
-      // t=0.25 (10+ letters):   ~600 frames  = 10s
-      // t=0.50 (half):          ~900 frames  = 15s
-      // t=1.00 (all):           ~1800 frames = 30s
-      // Use a strong exponential curve
-      var delay = Math.pow(t, 0.6) * 300;
-      f.intDelay = delay;
-    }
-  }
-
-  function mkFrag(verts) {
-    var cx = 0, cy = 0;
-    for (var i = 0; i < verts.length; i++) { cx += verts[i].x; cy += verts[i].y; }
-    cx /= verts.length; cy /= verts.length;
-    // Rotation: very slow, random direction, varied speeds
-    // ~30s full rotation = 0.0035 rad/frame, vary from 0.5x to 2x
-    var direction = Math.random() < 0.5 ? 1 : -1;
-    var rSpeed = direction * (0.0075 + Math.random() * 0.0055);
-    var rWobbleAmp = 0, rWobbleFreq = 0;
-    // Scale behavior: some grow first, some shrink, different rates
-    var scaleUp = Math.random() < 0.35; // 35% grow first
-    var scaleRate = 0.5 + Math.random() * 1.5; // 0.5x to 2x speed
-    var scalePeak = scaleUp ? 1.15 + Math.random() * 0.35 : 1; // grow up to 1.5x
-    return {
-      verts: verts, cx: cx, cy: cy,
-      ox: 0, oy: 0, vx: 0, vy: 0,
-      scale: 1, opacity: 1, rot: 0,
-      rotSpeed: rSpeed,
-      wobbleAmp: rWobbleAmp,
-      wobbleFreq: rWobbleFreq,
-      scaleUp: scaleUp,
-      scaleRate: scaleRate,
-      scalePeak: scalePeak,
-      phase: Math.random() * Math.PI * 2,
-      shatterDX: 0,
-      shatterDY: 0,
-      intDelay: Math.pow(Math.random(), 5) * 1800,
-      driftX: 0.002 + Math.random() * 0.008,
-      driftY: (Math.random() - 0.4) * 0.004,
-      dead: false,
-    };
-  }
-
-  var crossfadeStart = 0;
-  var crossfadeDuration = 180; // ~3s canvas fade in
-  var htmlFadeDelay = 120;     // HTML starts fading ~2s in
-  var htmlFadeDuration = 60;   // HTML fades over ~1s
-
-  // Cycle timers
-  var ACTIVE_TRIGGER = 1800;   // 30s of continued interaction after integrate starts
-  var PASSIVE_TRIGGER = 3600;  // 60s of no mouse movement
-  var LOCK_DURATION = 1200;    // 20s locked after reassembly
-  var integrateStartTick = 0;
-  var reassembleStartTick = 0;
-  var lockStartTick = 0;
-  var allLettersDone = false;
-
-  // Store original positions for reassembly
-  var originalFragData = [];
-
-  function triggerTextShatter() {
-    if (shatterTriggered) return;
-    shatterTriggered = true;
-    shatterPhase = 'crossfade';
-    shatterPhaseTick = tick;
-    crossfadeStart = tick;
-    allLettersDone = false;
-    // Save original state for reassembly
-    originalFragData = [];
-    for (var i = 0; i < textFragments.length; i++) {
-      var f = textFragments[i];
-      originalFragData.push({ cx: f.cx, cy: f.cy });
-      f.started = true;
-      f.opacity = 0;
-      f.ox = 0; f.oy = 0; f.vx = 0; f.vy = 0;
-      f.rot = 0; f.scale = 1;
-    }
-  }
-
-  function triggerReassemble() {
-    shatterPhase = 'reassemble';
-    reassembleStartTick = tick;
-    // Snapshot current state as starting point for lerp back
-    for (var i = 0; i < textFragments.length; i++) {
-      var f = textFragments[i];
-      f.reassembleOx = f.ox;
-      f.reassembleOy = f.oy;
-      f.reassembleRot = f.rot * 0.2; // only unwind 1/5 of rotation
-      f.reassembleScale = f.scale;
-      f.reassembleOpacity = f.opacity;
-      // Stagger reassembly — half the original stagger duration
-      f.reassembleDelay = Math.pow(Math.random(), 0.6) * 150;
-    }
-  }
-
-  function updateTextFragments() {
-    if (shatterPhase === 'dormant' || shatterPhase === 'locked') return;
-    if (textFragments.length === 0 && shatterPhase !== 'locked') return;
-
-    // --- CROSSFADE: HTML → canvas ---
-    if (shatterPhase === 'crossfade') {
-      var cfElapsed = tick - crossfadeStart;
-      var canvasOpacity = Math.min(cfElapsed / crossfadeDuration, 1);
-      canvasOpacity = canvasOpacity * canvasOpacity;
-      for (var i = 0; i < textFragments.length; i++) {
-        textFragments[i].opacity = canvasOpacity;
-      }
-      if (cfElapsed > htmlFadeDelay) {
-        var htmlProgress = Math.min((cfElapsed - htmlFadeDelay) / htmlFadeDuration, 1);
-        document.querySelector('.hero-headline').style.opacity = 1 - htmlProgress;
-      }
-      if (cfElapsed >= crossfadeDuration) {
-        document.querySelector('.hero-headline').style.visibility = 'hidden';
-        document.querySelector('.hero-headline').style.opacity = 1;
-        for (var i = 0; i < textFragments.length; i++) {
-          textFragments[i].opacity = 1;
-        }
-        shatterPhase = 'integrate';
-        shatterPhaseTick = tick;
-        integrateStartTick = tick;
-      }
-      return;
-    }
-
-    // --- INTEGRATE: letters animate out ---
-    if (shatterPhase === 'integrate') {
-      var allFaded = true;
-      for (var i = 0; i < textFragments.length; i++) {
-        var f = textFragments[i];
-        var age = tick - shatterPhaseTick - f.intDelay;
-        if (age < 0) { allFaded = false; continue; }
-
-        var ramp = Math.min(age / 300, 1);
-        ramp = ramp * ramp;
-
-        var dx = mouse.x - (f.cx + f.ox);
-        var dy = mouse.y - (f.cy + f.oy);
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 280 && dist > 0) {
-          var force = (280 - dist) / 280 * (0.005 + ramp * 0.035);
-          f.vx += dx / dist * force;
-          f.vy += dy / dist * force;
-        }
-
-        f.vx += f.driftX * ramp;
-        f.vy += f.driftY * ramp;
-        var damping = 0.96 + ramp * 0.025;
-        f.vx *= damping;
-        f.vy *= damping;
-        f.rot += f.rotSpeed * ramp;
-        f.ox += f.vx;
-        f.oy += f.vy;
-
-        var progress = Math.min(age * f.scaleRate / 360, 1);
-        f.scale = Math.max(1 - progress * 0.85, 0.1);
-        f.opacity = Math.max(1 - progress * 0.9, 0);
-        if (f.opacity > 0.02) allFaded = false;
-      }
-
-      // Check triggers for reassembly
-      var integrateAge = tick - integrateStartTick;
-      var mouseActive = mouse.x > -500 && tick - lastMouseMoveFrame < 60;
-
-      // Active: 30s of sustained interaction
-      if (mouseActive && integrateAge > ACTIVE_TRIGGER) {
-        triggerReassemble();
-        return;
-      }
-      // Passive: 60s of no mouse
-      if (!mouseActive && tick - lastMouseMoveFrame > PASSIVE_TRIGGER) {
-        triggerReassemble();
-        return;
-      }
-      // All letters fully faded — also reassemble
-      if (allFaded) {
-        triggerReassemble();
-        return;
-      }
-      return;
-    }
-
-    // --- REASSEMBLE: letters return to position at 2x speed ---
-    if (shatterPhase === 'reassemble') {
-      var totalDuration = 300; // ~5s for full reassembly (half of animate-out)
-      var allDone = true;
-      for (var i = 0; i < textFragments.length; i++) {
-        var f = textFragments[i];
-        var age = tick - reassembleStartTick - f.reassembleDelay;
-        if (age < 0) { allDone = false; continue; }
-
-        var t = Math.min(age / totalDuration, 1);
-        var e = ease(t); // smooth ease in-out
-
-        // Lerp from scattered position back to origin
-        f.ox = f.reassembleOx * (1 - e);
-        f.oy = f.reassembleOy * (1 - e);
-        f.rot = f.reassembleRot * (1 - e);
-        f.scale = f.reassembleScale + (1 - f.reassembleScale) * e;
-        f.opacity = f.reassembleOpacity + (1 - f.reassembleOpacity) * e;
-        f.vx = 0; f.vy = 0;
-
-        if (t < 1) allDone = false;
-      }
-
-      if (allDone) {
-        // All letters back in place — reverse crossfade
-        shatterPhase = 'reverse-crossfade';
-        crossfadeStart = tick;
-        // Ensure all fragments at origin
-        for (var i = 0; i < textFragments.length; i++) {
-          var f = textFragments[i];
-          f.ox = 0; f.oy = 0; f.rot = 0; f.scale = 1; f.opacity = 1;
-          f.vx = 0; f.vy = 0;
-        }
-      }
-      return;
-    }
-
-    // --- REVERSE CROSSFADE: canvas → HTML ---
-    if (shatterPhase === 'reverse-crossfade') {
-      var rcDuration = 120; // ~2s
-      var rcElapsed = tick - crossfadeStart;
-      var canvasOpacity = Math.max(1 - rcElapsed / rcDuration, 0);
-      for (var i = 0; i < textFragments.length; i++) {
-        textFragments[i].opacity = canvasOpacity;
-      }
-      // Show HTML and fade it in
-      var h = document.querySelector('.hero-headline');
-      h.style.visibility = 'visible';
-      h.style.opacity = Math.min(rcElapsed / rcDuration, 1);
-
-      if (rcElapsed >= rcDuration) {
-        h.style.opacity = 1;
-        // Enter locked state
-        shatterPhase = 'locked';
-        lockStartTick = tick;
-        // Reset fragment state for next cycle
-        for (var i = 0; i < textFragments.length; i++) {
-          var f = textFragments[i];
-          f.ox = 0; f.oy = 0; f.vx = 0; f.vy = 0;
-          f.rot = 0; f.scale = 1; f.opacity = 0;
-          f.started = false;
-        }
-        shatterTriggered = false;
-        shatterInteraction = 0;
-      }
-      return;
-    }
-  }
-
-  function drawTextFragments() {
-    if (!fragCtx) return;
-    fragCtx.clearRect(0, 0, width, height);
-    if (shatterPhase === 'dormant' || shatterPhase === 'locked' || !shatterOffCanvas) return;
-    var dpr = window.devicePixelRatio || 1;
-    var imgW = shatterOffCanvas.width / dpr;
-    var imgH = shatterOffCanvas.height / dpr;
-    for (var i = 0; i < textFragments.length; i++) {
-      var f = textFragments[i];
-      if (!f.started) continue;
-      fragCtx.save();
-      fragCtx.globalAlpha = f.opacity;
-      var cx = f.cx + f.ox;
-      var cy = f.cy + f.oy;
-      fragCtx.translate(cx, cy);
-      fragCtx.rotate(f.rot);
-      fragCtx.scale(f.scale, f.scale);
-      fragCtx.translate(-cx, -cy);
-      fragCtx.beginPath();
-      fragCtx.moveTo(f.verts[0].x + f.ox, f.verts[0].y + f.oy);
-      for (var j = 1; j < f.verts.length; j++) {
-        fragCtx.lineTo(f.verts[j].x + f.ox, f.verts[j].y + f.oy);
-      }
-      fragCtx.closePath();
-      fragCtx.clip();
-      fragCtx.drawImage(shatterOffCanvas,
-        0, 0, shatterOffCanvas.width, shatterOffCanvas.height,
-        shatterOffsetX + f.ox, shatterOffsetY + f.oy, imgW, imgH);
-      fragCtx.restore();
-    }
   }
 
   function updateAndDraw(arr, cfg) {
@@ -2573,21 +2162,6 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     tick++;
     rotation += ROTATION_SPEED;
 
-    // Locked phase countdown
-    if (shatterPhase === 'locked' && tick - lockStartTick > LOCK_DURATION) {
-      shatterPhase = 'dormant';
-    }
-
-    // Track continuous mouse interaction for text shatter
-    if (!shatterTriggered && shatterPhase === 'dormant' && mouse.x > -500 && tick - lastMouseMoveFrame < 30) {
-      shatterInteraction++;
-    } else if (!shatterTriggered && shatterPhase === 'dormant') {
-      shatterInteraction = Math.max(0, shatterInteraction - 2);
-    }
-    if (shatterInteraction > SHATTER_TRIGGER && !shatterTriggered && shatterPhase === 'dormant' && textFragments.length > 0) {
-      triggerTextShatter();
-    }
-
     // Rotate around center of canvas
     ctx.save();
     ctx.translate(width / 2, height / 2);
@@ -2600,11 +2174,6 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     updateAndDraw(frontParticles, FRONT);
 
     ctx.restore();
-
-    // Text shatter fragments (screen space, no rotation)
-    updateTextFragments();
-    drawTextFragments();
-
     requestAnimationFrame(animate);
   }
 
@@ -2648,14 +2217,6 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
   window.addEventListener('orientationchange', () => { setTimeout(() => { resize(); createParticles(); }, 200); });
   resize();
   createParticles();
-
-  // Build text fragments after fonts load
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function() { buildTextFragments(); });
-  } else {
-    window.addEventListener('load', function() { buildTextFragments(); });
-  }
-
   animate();
 })();
 
