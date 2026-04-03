@@ -863,9 +863,29 @@ nav {
 }
 .about-seals {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   margin-top: 36px;
   flex-wrap: wrap;
+}
+.seal-pair {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+.seal-box {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.seal-box img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  object-fit: contain;
 }
 .about-seals a {
   display: block;
@@ -1729,7 +1749,7 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
         <h2 class="about-name">Dan Benner</h2>
         <div class="about-role">Product Owner · AI Strategist · Discovery to Roadmap</div>
         <p class="about-text">The work is deceptively simple: determine what gets built, in what order, and why it matters to the people who will use it. The hard part is that the answers are rarely what the organization assumes they are when the work starts.</p>
-        <p class="about-text">My practice is built around that gap — between what teams believe they're solving and what's actually driving the problem. Part diagnosis, part stakeholder navigation, part structured decision-making under pressure. The deliverable is a direction the team can build toward with confidence.</p>
+        <p class="about-text">My practice is built around that gap — between what teams believe they're solving and what's actually driving the problem. Part diagnosis, part stakeholder navigation, part structured decision-making under pressure. The deliverable is a direction the team can build toward with continual confidence.</p>
         <div class="about-contact">
           <div class="email-btn">
             <span class="email-text">benner.dan@gmail.com</span>
@@ -1746,10 +1766,14 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
           (843) 504-7221
         </div>
         <div class="about-seals">
-          <a href="https://bcert.me/bc/html/show-badge.html?b=jttbpsao" target="_blank" rel="noopener"><img src="images/seal-cspo.png" alt="Certified Scrum Product Owner"></a>
-          <a href="https://bcert.me/bc/html/show-badge.html?b=qoxpnkmy" target="_blank" rel="noopener"><img src="images/seal-csm.png" alt="Certified ScrumMaster"></a>
-          <a href="https://drive.google.com/file/d/12oYYyPOWrtv8fO9ufugPcZNyhaYdA6fT/view?usp=sharing" target="_blank" rel="noopener"><img src="images/nielsennorman.png" alt="Nielsen Norman Group Certified"></a>
-          <a href="https://drive.google.com/file/d/124QPFP4WYxmq6Ms5wgLIGnJe5XrCMZaI/view?usp=sharing" target="_blank" rel="noopener"><img src="images/seal-pmp-300.png" alt="PMP Trained - Project Management Professional" style="width:127px;height:127px;margin-top:12px;border-radius:0"></a>
+          <div class="seal-pair">
+            <div class="seal-box"><a href="https://bcert.me/bc/html/show-badge.html?b=jttbpsao" target="_blank" rel="noopener"><img src="images/seal-cspo.png" alt="Certified Scrum Product Owner"></a></div>
+            <div class="seal-box"><a href="https://bcert.me/bc/html/show-badge.html?b=qoxpnkmy" target="_blank" rel="noopener"><img src="images/seal-csm.png" alt="Certified ScrumMaster"></a></div>
+          </div>
+          <div class="seal-pair">
+            <div class="seal-box"><a href="https://drive.google.com/file/d/124QPFP4WYxmq6Ms5wgLIGnJe5XrCMZaI/view?usp=sharing" target="_blank" rel="noopener"><img src="images/seal-pmp-300.png" alt="PMP Trained - Project Management Professional" style="max-height:123px"></a></div>
+            <div class="seal-box"><a href="https://drive.google.com/file/d/12oYYyPOWrtv8fO9ufugPcZNyhaYdA6fT/view?usp=sharing" target="_blank" rel="noopener"><img src="images/seal-nng.png" alt="NN/Group UX Certified Master" style="max-height:123px"></a></div>
+          </div>
         </div>
       </div>
     </div>
