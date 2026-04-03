@@ -2008,7 +2008,8 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
   var shatterTriggered = false;
   var shatterOffCanvas = null;
   var shatterOffsetX = 0, shatterOffsetY = 0;
-  const SHATTER_TRIGGER = 300;   // 5s interaction
+  const SHATTER_TRIGGER = 420;   // 7s interaction
+  const SHATTER_MIN_AGE = 420;   // 7s minimum before shatter can trigger
   var ACTIVE_TRIGGER = 1800;     // 30s sustained → reassemble
   var PASSIVE_TRIGGER = 3600;    // 60s no mouse → reassemble
   var LOCK_DURATION = 1200;      // 20s locked after reassembly
@@ -2514,13 +2515,13 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     } else if (!shatterTriggered && shatterPhase === 'static') {
       shatterInteraction = Math.max(0, shatterInteraction - 2);
     }
-    if (shatterInteraction > SHATTER_TRIGGER && !shatterTriggered && shatterPhase === 'static' && textFragments.length > 0) {
+    if (shatterInteraction > SHATTER_TRIGGER && !shatterTriggered && shatterPhase === 'static' && tick > SHATTER_MIN_AGE && textFragments.length > 0) {
       triggerTextShatter();
     }
 
     // Rotate and breathe around center of canvas
     var breatheT = Math.sin(tick * Math.PI * 2 / (60 * 60)); // -1 to 1 over 60s
-    var breathe = breatheT > 0 ? 1 + breatheT * 0.15 : 1 + breatheT * 0.20;
+    var breathe = breatheT > 0 ? 1 + breatheT * 0.15 : 1 + breatheT * 0.15;
     ctx.save();
     ctx.translate(width / 2, height / 2);
     ctx.rotate(rotation);
