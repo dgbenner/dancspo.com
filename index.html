@@ -521,16 +521,16 @@ nav {
 /* First button: rounded left corners only */
 .seg-btn:first-child {
   border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-  border-right: none;
 }
-/* Middle button: no rounded corners */
+/* Middle button: collapse border overlap */
 .seg-btn:nth-child(2) {
   border-radius: 0;
+  margin-left: -1px;
 }
 /* Last button: rounded right corners only */
 .seg-btn:last-child {
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  border-left: none;
+  margin-left: -1px;
 }
 .seg-btn:hover {
   background: #a41608;
@@ -541,6 +541,8 @@ nav {
   background: #a41608;
   border-color: #a41608;
   color: var(--white);
+  z-index: 1;
+  position: relative;
 }
 
 /* Segmented content panels */
@@ -1161,12 +1163,12 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
         <div class="style-tile">
           <img src="images/bestbuy.jpg" alt="Best Buy key slide" class="style-tile-img">
           <div class="style-tile-meta">
-            <span class="pill">Product Designer + Usability Researcher</span>
+            <span class="pill">Service Designer + Usability Researcher</span>
             <span class="pill">2017–2019</span>
           </div>
         </div>
         <div class="project-content">
-          <div class="project-role">Product Designer + Usability Researcher</div>
+          <div class="project-role">Service Designer + Usability Researcher</div>
           <p class="project-desc">AI-assisted self-diagnosis on BestBuy.com, built from 25 years of Geek Squad call transcripts. Later evolved into a triage model across all Best Buy-supported products.</p>
           <div class="segmented-controller">
             <button class="seg-btn active" data-seg="narrative" data-project="bestbuy">What Was Broken</button>
@@ -1179,10 +1181,10 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
             <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">A self-service diagnostic tool that helped customers troubleshoot their own devices, surfaced a repair-or-replace estimate at the right moment, and used what customers chose to improve their decision making.</p></div>
           </div>
           <div class="seg-panel" id="seg-overview-bestbuy">
-            <div class="narrative-section"><div class="narrative-label">Research</div><p class="narrative-text">Participants screened for active device issues to ensure real-world scenarios. Methods included competitive analysis, field studies with Geek Squad agents, customer interviews, unmoderated remote usability testing on desktop and mobile, heuristic analysis, and dot voting.</p></div>
-            <div class="narrative-section"><div class="narrative-label">Key Findings</div><p class="narrative-text">80% of test participants said they would use the feature in real life. Most participants were unaware Best Buy offered computer repair — a significant gap surfaced through research, not marketing. Users found the interaction length appropriate and the stages logically sequenced, but expected more in the way of pricing and timing options. The repair-or-replace decision was identified as a missed opportunity.</p></div>
-            <div class="narrative-section"><div class="narrative-label">Recommendations</div><p class="narrative-text">Pricing and timing estimates at the point of diagnosis. Device trade-in value and new device pricing to support the repair-or-replace decision. Auto-authentication and device auto-recognition to reduce friction. Improved DIY and troubleshooting databases. Geek Squad Chat integration. Taxonomy study to better map user mental models.</p></div>
-            <div class="narrative-section"><div class="narrative-label">Delivery</div><p class="narrative-text">Decision tree, conversational design system, API and tech flow map, wireflows, high-fidelity design for mobile and desktop, copy deck, MVP question framework.</p></div>
+            <div class="narrative-section"><div class="narrative-label">Research</div><p class="narrative-text">Participants screened for recent device issues to ensure close-to-real-world scenarios. Methods included competitive analysis, field studies with Geek Squad agents, customer interviews, unmoderated remote usability testing on desktop and mobile, heuristic analysis, and dot voting.</p></div>
+            <div class="narrative-section"><div class="narrative-label">Key Findings</div><p class="narrative-text">80% of test participants said they would use the feature in real life. Most participants were unaware Best Buy offered computer repair — a significant gap surfaced through research, not marketing. Users found the interaction length appropriate and logically sequenced but expected pricing and timing options. The repair-or-replace decision was identified as a missed opportunity.</p></div>
+            <div class="narrative-section"><div class="narrative-label">Recommendations</div><p class="narrative-text">Pricing and timing estimates at point of diagnosis. Auto-authentication and device auto-recognition. Improve DIY and troubleshooting databases. Geek Squad Chat integration and on call remote service. Taxonomy study to better map user mental models.</p></div>
+            <div class="narrative-section"><div class="narrative-label">Deliverables</div><p class="narrative-text">Service blueprint mapping customer flow, system decision logic, and technology touchpoints at each stage. Conversational design and microinteractions guides covering dialogue structure, language patterns, and interface cues. Decision tree, wireflows, high-fidelity design for mobile and desktop, copy deck, MVP question framework.</p></div>
           </div>
           <div class="seg-panel" id="seg-prd-bestbuy">
             <div class="prd-table">
