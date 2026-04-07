@@ -468,6 +468,8 @@ nav {
   height: 100%;
   object-fit: cover;
   display: block;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 /* .style-tile-meta {
   font-family: var(--mono);
@@ -522,7 +524,7 @@ nav {
   font-weight: 500;
   padding: 10px 0;
   border: 1px solid var(--border);
-  background: rgba(26, 26, 26, 0.8);
+  background: rgba(26, 26, 26, 0.5);
   color: var(--cream);
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
@@ -1466,18 +1468,20 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
         </div>
         <div class="project-content">
           <div class="project-role" style="margin-top: 0;">Product Strategist</div>
-          <p class="project-desc">A globally-used IT infrastructure monitoring application had been built by engineers, for engineers. The network administrators who depended on it daily were working around it as much as with it.</p>
+          <p class="project-desc">Redesigned a globally-used IT infrastructure monitoring application — transforming an engineer-built legacy system into an accessible platform for enterprise network administrators. Delivered 60% under budget as a three-person team with the client's strategist and CTO.</p>
           <div class="segmented-controller">
             <button class="seg-btn active" data-seg="narrative" data-project="nagios">What Was Broken</button>
-            <button class="seg-btn" data-seg="overview" data-project="nagios">Overview</button>
+            <button class="seg-btn" data-seg="overview" data-project="nagios">Delivery</button>
             <button class="seg-btn" data-seg="prd" data-project="nagios">PRD</button>
           </div>
           <div class="seg-panel active" id="seg-narrative-nagios">
-            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">Nagios XI was a legacy monitoring platform with significant market presence but an interface that reflected how it was built — by engineers, without sustained attention to the administrators who used it operationally. Usability debt had accumulated over time and the gap between what the tool could do and what users could reliably do with it had widened.</p></div>
-            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">The product's complexity wasn't a feature — it was a barrier wearing the appearance of one. Power users had internalized workarounds that made the tool functional for them, which masked the severity of the problem for anyone outside that group. Accessibility gaps compounded the issue for enterprise environments with compliance requirements. The surface read was that the product needed modernization; the actual problem was that it had never been designed for its primary user in the first place.</p></div>
-            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">A modernized platform scoped to how enterprise network administrators actually work — accessible, legible under operational pressure, and built around the monitoring workflows that matter rather than the full range of what the system could technically expose. The redesign reoriented the product around its user rather than its architecture.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">Nagios XI had significant market presence but an interface that reflected how it was built — by engineers, without sustained attention to the administrators who used it daily. New users memorized non-intuitive steps and blamed themselves for not finding features. Long-time users had built workarounds so ingrained they'd resist any change to them. The product served airlines, defense contractors, governments, and enterprise retailers monitoring everything from server health to nuclear reactor temperature gauges — and the interface hadn't kept pace with that scale or those stakes.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">The product's complexity looked like a feature. Power users had internalized workarounds that made the tool functional for them, which masked the severity of the problem for everyone else. The system had never been evaluated against its actual user spectrum — the Learner who doesn't yet know the platform, the Legend who exploits every shortcut, and the Legacy user who will fight any change to their workflow. Without that lens, every improvement risked solving for one group at the expense of another.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">A modernized platform scoped to how enterprise network administrators actually work — accessible under operational pressure, navigable across permission levels, and built around monitoring workflows rather than the full range of what the system could technically expose. Not a rebuild but a reorientation: the same trusted, feature-rich application redesigned around its user instead of its architecture.</p></div>
           </div>
-          <div class="seg-panel" id="seg-overview-nagios"><p class="overview-text">Nagios XI was a globally-used IT infrastructure monitoring platform with an interface that had grown from the engineering environment that produced it rather than from the needs of the administrators who depended on it. The gap between technical capability and operational usability had become significant enough to affect how the product competed in enterprise environments.</p><p class="overview-text" style="margin-top:12px">The engagement centered on transforming an engineer-built legacy system into a modern, accessible platform for enterprise network administrators. Discovery identified the core problem: the product's complexity read as depth to power users who had learned its patterns, but created real friction for the broader administrative population — and created compliance exposure in enterprise environments with accessibility requirements.</p><p class="overview-text" style="margin-top:12px">The redesign reoriented the product around its actual user rather than its underlying architecture, prioritizing the monitoring workflows that drive daily operational decisions over the full surface area of what the system could expose.</p></div>
+          <div class="seg-panel" id="seg-overview-nagios">
+            <div class="narrative-section"><div class="narrative-label">Delivery</div><p class="narrative-text">Heuristic analysis at global and page level. Information architecture redesign and wireframes. Visual design for desktop including interactive homepage prototype. Stakeholder and user interviews across global user base. Applied complexity frameworks (institutional, environmental, informational, integration) and modified usability heuristics for expert-domain applications — safe exploration, guardrails, bulk actions, learning cues, spatial predictability. Created user archetypes (Learner, Legend, Legacy) to evaluate every navigation and hierarchy decision against the full experience spectrum. Delivered as a three-person team, 60% under budget.</p></div>
+          </div>
           <div class="seg-panel" id="seg-prd-nagios">
             <div class="prd-table"><div class="prd-row"><div class="prd-label">Owner</div><div class="prd-value">Dan Benner</div></div><div class="prd-row"><div class="prd-label">Team</div><div class="prd-value">Nagios XI product and engineering; enterprise network administrator user segment</div></div><div class="prd-row"><div class="prd-label">Summary</div><div class="prd-value">Redesign of a globally-used IT infrastructure monitoring application, transforming an engineer-built legacy system into a modern, accessible platform for enterprise network administrators</div></div><div class="prd-row"><div class="prd-label">Status</div><div class="prd-value">Discovery and redesign complete</div></div><div class="prd-row"><div class="prd-label">Next Milestone</div><div class="prd-value">Accessibility compliance validation prior to enterprise release</div></div></div>
             <div class="prd-section-title">Problem Definition</div><p class="overview-text">Nagios XI's interface reflected the engineering environment that produced it rather than the operational needs of the network administrators who used it daily. Usability debt had accumulated over time. Accessibility gaps created compliance exposure in enterprise accounts. The product's complexity was masking adoption friction rather than indicating product depth.</p>
