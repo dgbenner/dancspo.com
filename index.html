@@ -432,10 +432,14 @@ nav {
   z-index: 0;
   pointer-events: none;
 }
+#projectsCanvas.grabbing {
+  pointer-events: auto;
+  cursor: grabbing;
+}
 .project-block {
-  margin-bottom: 64px;
+  margin-bottom: 80px;
   padding-bottom: 64px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #2a2a2a;
 }
 .project-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 .project-grid {
@@ -1433,17 +1437,19 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
         </div>
         <div class="project-content">
           <div class="project-role" style="margin-top: 0;">Consultant</div>
-          <p class="project-desc">A Series A multilingual interpretation platform serving the European Parliament, Interpol, NATO, and the United Nations had no systematic way to know whether its product was working for the people using it.</p>
+          <p class="project-desc">Directed usability research across a Series A multilingual interpretation platform used by the European Parliament, Interpol, NATO, and the United Nations. Broad mandate with narrow budget: explore the product suite, introduce research practices, and demonstrate value to a company that had been told not to use the word "research" around its founders.</p>
           <div class="segmented-controller">
             <button class="seg-btn active" data-seg="narrative" data-project="kudo">What Was Broken</button>
-            <button class="seg-btn" data-seg="overview" data-project="kudo">Overview</button>
+            <button class="seg-btn" data-seg="overview" data-project="kudo">Delivery</button>
           </div>
           <div class="seg-panel active" id="seg-narrative-kudo">
-            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">KUDO had assembled an unusually high-stakes client roster for a startup at its stage. The platform was live and in use across international institutions where interpretation failures carry real consequence. Despite that exposure, the organization had no structured research practice. Product decisions were being made without a reliable mechanism for gathering or acting on user feedback.</p></div>
-            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">The gap wasn't awareness — the team understood that research mattered. The missing piece was operational. No framework existed for running usability work in a context where users were professionals operating under session pressure, across languages and jurisdictions, often in environments the team couldn't directly observe. Standard research methods didn't translate. The research problem was as specialized as the product.</p></div>
-            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">A usability research framework scoped to actual operating conditions — professional interpreters and conference participants working in high-stakes, time-constrained sessions across institutional environments. The deliverable was a repeatable process the team could run forward, not a one-time findings report.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Broken</div><p class="narrative-text">KUDO had experienced a massive COVID-driven growth spike and was stretched past its limits. Six applications were in various states of development with no usability feedback loop, no research infrastructure, and a product/founder leadership openly hostile to the idea. The VP of Product who brought me in was fighting that battle at the executive level while I worked across the product suite.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Hidden</div><p class="narrative-text">The resistance wasn't really about research — it was about a hardware company's identity. KUDO had built its reputation on physical interpretation booths. The digital products were new, and leadership was still thinking in terms of shipping features to keep up with demand, not building products that could sustain the growth. The interpretation-side executives and implementation leads understood the gap immediately. The product/founder side didn't.</p></div>
+            <div class="narrative-section"><div class="narrative-label">What Was Possible</div><p class="narrative-text">A lightweight research framework the company could run without me — moderated testing kit, scripts, severity matrix, observer guides — handed to the UI designers and localization team. Validated an AI-powered interpreter assistant through two pilots and six moderated sessions. Contributed findings across six applications, delivered directly to the VP of Product through findings decks, live observation, and raw notes.</p></div>
           </div>
-          <div class="seg-panel" id="seg-overview-kudo"><p class="overview-text">KUDO was a multilingual interpretation platform at Series A, with an enterprise client list that included the European Parliament, Interpol, NATO, and the United Nations. The product sat at an unusual intersection: consumer-grade interface expectations applied to a professional tool operating in high-stakes institutional settings, across languages, in sessions where failure has no graceful recovery.</p><p class="overview-text" style="margin-top:12px">The engagement focused on building a usability research framework rather than delivering a discrete findings package. At that stage and with that client profile, the more durable need was infrastructure — a repeatable process for gathering feedback from professional interpreters and conference participants in conditions that standard research approaches weren't designed for. Users were operating under session pressure, in multilingual environments, often in institutional settings with access constraints.</p><p class="overview-text" style="margin-top:12px">The framework defined who to recruit, how to reach them, what to measure, and how to run sessions given those constraints. It gave the product team a mechanism for ongoing learning rather than a snapshot that would age out.</p></div>
+          <div class="seg-panel" id="seg-overview-kudo">
+            <div class="narrative-section"><div class="narrative-label">Delivery</div><p class="narrative-text">Ran guerrilla-style research across six applications: Interpreter Assistant (AI glossary builder for event preparation), Live Interpretation Autosuggestor (real-time word suggestion during live multilingual sessions), KCP core platform, Conference Console, Marketplace, and client onboarding.</p><p class="narrative-text" style="margin-top:12px">Built reusable research toolkit (test plans, scripts, surveys, severity matrix). Conducted contextual interviews with interpreters, implementation leads, and marketplace stakeholders. Findings fed into VP of Product's development and production decisions.</p></div>
+          </div>
         </div>
       </div>
     </div>
@@ -2795,6 +2801,11 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
   let mouseClient = { x: -10000, y: -10000 };
   let obstacles = [];
 
+  // Grab-and-fling state
+  let dragGroup = null;
+  let dragHistory = []; // recent mouse positions for velocity calc
+  const GRAB_RADIUS = 60; // px to detect a grab
+
   function updateMouseFromClient() {
     if (mouseClient.x < -5000) return;
     const rect = section.getBoundingClientRect();
@@ -2861,7 +2872,7 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
           phase: Math.random() * Math.PI * 2,
         });
       }
-      groups.push({ cfg: cfg, dots: dots, tick: 0 });
+      groups.push({ cfg: cfg, dots: dots, tick: 0, flung: 0 });
     }
   }
 
@@ -2915,6 +2926,7 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
       const g = groups[i];
       const cfg = g.cfg;
       g.tick++;
+      if (g.flung > 0) g.flung--;
       const primary = g.dots[0];
 
       // Compute group centroid for light group-wide rotation
@@ -2936,34 +2948,55 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
           dot.vy += (gdx / gdist) * groupRot * gdist;
         }
 
-        // Seek mouse (primary full force, grays weaker)
+        // If this group is being dragged, primary chases cursor with strong pull (not snap)
+        if (dragGroup === g && isPrimary) {
+          var dragDx = mouse.x - dot.x;
+          var dragDy = mouse.y - dot.y;
+          dot.vx = dragDx * 0.4;
+          dot.vy = dragDy * 0.4;
+        }
+
+        // Seek mouse (suppressed while flung or dragged)
+        const flingFade = Math.max(0, 1 - g.flung / 3000); // very gradual return to normal
         const targetX = hasMouse ? mouse.x : w / 2;
         const targetY = hasMouse ? mouse.y : h / 2;
         const dx = targetX - dot.x;
         const dy = targetY - dot.y;
         const distM = Math.sqrt(dx * dx + dy * dy);
-        const seek = isPrimary ? cfg.seekForce : cfg.seekForce * cfg.graySeekMult;
+        const seek = (isPrimary ? cfg.seekForce : cfg.seekForce * cfg.graySeekMult) * flingFade;
         if (distM > 1) {
           dot.vx += (dx / distM) * seek;
           dot.vy += (dy / distM) * seek;
         }
 
-        // Grays spring toward primary (with oscillating desired distance + rotation)
+        // Grays spring toward primary — tight while dragged/flung, loose when normal
         if (!isPrimary) {
           const rdx = dot.x - primary.x;
           const rdy = dot.y - primary.y;
           const rdist = Math.sqrt(rdx * rdx + rdy * rdy);
-          const desiredR = cfg.restDist + Math.sin(g.tick * cfg.wanderFreq + dot.phase) * cfg.wanderAmp;
-          const cappedR = Math.min(Math.max(desiredR, 15), 150);
+          // Blend between tight (0) and normal (1) based on flingFade
+          const looseness = dragGroup === g ? 0 : flingFade;
+          // Interpolate spring parameters
+          const tightDist = 20;
+          const normalDist = cfg.restDist + Math.sin(g.tick * cfg.wanderFreq + dot.phase) * cfg.wanderAmp;
+          const cappedNormal = Math.min(Math.max(normalDist, 15), 150);
+          const desiredR = tightDist + (cappedNormal - tightDist) * looseness;
+          const springK = 0.08 - looseness * 0.06; // 0.08 tight → 0.02 loose
           if (rdist > 0.1) {
-            const diff = rdist - cappedR;
-            const springForce = diff * 0.02;
-            dot.vx -= (rdx / rdist) * springForce;
-            dot.vy -= (rdy / rdist) * springForce;
-
-            // Tangential rotation around primary
-            dot.vx += (-rdy / rdist) * cfg.rotSpeed * rdist * 0.06;
-            dot.vy += (rdx / rdist) * cfg.rotSpeed * rdist * 0.06;
+            const diff = rdist - desiredR;
+            dot.vx -= (rdx / rdist) * diff * springK;
+            dot.vy -= (rdy / rdist) * diff * springK;
+            // Rotation only when loose
+            if (looseness > 0.1) {
+              dot.vx += (-rdy / rdist) * cfg.rotSpeed * rdist * 0.06 * looseness;
+              dot.vy += (rdx / rdist) * cfg.rotSpeed * rdist * 0.06 * looseness;
+            }
+          }
+          // Extra damping when tight
+          if (looseness < 0.5) {
+            const tightDamp = 0.85 + looseness * 0.3;
+            dot.vx *= tightDamp;
+            dot.vy *= tightDamp;
           }
         } else {
           // Primary has a subtle wander of its own (prior propulsion remnant)
@@ -3001,34 +3034,37 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
         dot.vx += avoid.x * cfg.avoidForce;
         dot.vy += avoid.y * cfg.avoidForce;
 
-        // Damping (high for space-junk momentum)
-        dot.vx *= cfg.damping;
-        dot.vy *= cfg.damping;
+        // Damping (less friction when flung for satisfying slide)
+        const damp = g.flung > 0 ? 0.992 : cfg.damping;
+        dot.vx *= damp;
+        dot.vy *= damp;
 
-        // Clamp max speed
+        // Clamp max speed (allow higher when flung)
+        const flingMaxMult = g.flung > 0 ? 15 : 1;
         const sp = Math.sqrt(dot.vx * dot.vx + dot.vy * dot.vy);
-        if (sp > cfg.maxSpeed) {
-          dot.vx = (dot.vx / sp) * cfg.maxSpeed;
-          dot.vy = (dot.vy / sp) * cfg.maxSpeed;
+        if (sp > cfg.maxSpeed * flingMaxMult) {
+          dot.vx = (dot.vx / sp) * cfg.maxSpeed * flingMaxMult;
+          dot.vy = (dot.vy / sp) * cfg.maxSpeed * flingMaxMult;
         }
 
         dot.x += dot.vx;
         dot.y += dot.vy;
 
-        // Canvas bounds
+        // Canvas bounds bounce (elastic when flung, soft otherwise)
         const m = 8;
-        if (dot.x < m) { dot.x = m; dot.vx = Math.abs(dot.vx) * 0.5; }
-        if (dot.x > w - m) { dot.x = w - m; dot.vx = -Math.abs(dot.vx) * 0.5; }
-        if (dot.y < m) { dot.y = m; dot.vy = Math.abs(dot.vy) * 0.5; }
-        if (dot.y > h - m) { dot.y = h - m; dot.vy = -Math.abs(dot.vy) * 0.5; }
+        const bounce = g.flung > 0 ? 0.85 : 0.5;
+        if (dot.x < m) { dot.x = m; dot.vx = Math.abs(dot.vx) * bounce; }
+        if (dot.x > w - m) { dot.x = w - m; dot.vx = -Math.abs(dot.vx) * bounce; }
+        if (dot.y < m) { dot.y = m; dot.vy = Math.abs(dot.vy) * bounce; }
+        if (dot.y > h - m) { dot.y = h - m; dot.vy = -Math.abs(dot.vy) * bounce; }
 
-        // Push out of rects
+        // Push out of rects (also bouncy when flung)
         const push = pushOutOfRects(dot.x, dot.y);
         if (push) {
           dot.x += push.x;
           dot.y += push.y;
-          if (Math.abs(push.x) > 0) dot.vx = -dot.vx * 0.5;
-          if (Math.abs(push.y) > 0) dot.vy = -dot.vy * 0.5;
+          if (Math.abs(push.x) > 0) dot.vx = -dot.vx * bounce;
+          if (Math.abs(push.y) > 0) dot.vy = -dot.vy * bounce;
         }
       }
 
@@ -3065,6 +3101,53 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
       mouseClient.x = e.clientX;
       mouseClient.y = e.clientY;
       updateMouseFromClient();
+
+      // Track drag history for fling velocity
+      if (dragGroup) {
+        dragHistory.push({ x: mouse.x, y: mouse.y, t: performance.now() });
+        if (dragHistory.length > 6) dragHistory.shift();
+      }
+    });
+
+    // Grab: mousedown near a group's primary dot
+    window.addEventListener('mousedown', function(e) {
+      if (!mouse.x || mouse.x < -5000) return;
+      updateMouseFromClient();
+      for (var i = 0; i < groups.length; i++) {
+        var primary = groups[i].dots[0];
+        var dx = mouse.x - primary.x;
+        var dy = mouse.y - primary.y;
+        if (Math.sqrt(dx * dx + dy * dy) < GRAB_RADIUS) {
+          dragGroup = groups[i];
+          dragHistory = [{ x: mouse.x, y: mouse.y, t: performance.now() }];
+          canvas.classList.add('grabbing');
+          break;
+        }
+      }
+    });
+
+    // Fling: mouseup releases with velocity
+    window.addEventListener('mouseup', function() {
+      if (!dragGroup) return;
+      // Calculate fling velocity from drag history
+      if (dragHistory.length >= 2) {
+        var last = dragHistory[dragHistory.length - 1];
+        var first = dragHistory[0];
+        var dt = (last.t - first.t) / 1000; // seconds
+        if (dt > 0.01) {
+          var vx = (last.x - first.x) / dt * 0.02;
+          var vy = (last.y - first.y) / dt * 0.02;
+          // Apply velocity to all dots in the group
+          for (var d = 0; d < dragGroup.dots.length; d++) {
+            dragGroup.dots[d].vx += vx;
+            dragGroup.dots[d].vy += vy;
+          }
+          dragGroup.flung = 3000; // ~50 seconds of gradual flung decay
+        }
+      }
+      canvas.classList.remove('grabbing');
+      dragGroup = null;
+      dragHistory = [];
     });
   }
 
