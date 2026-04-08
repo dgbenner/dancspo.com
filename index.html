@@ -657,6 +657,7 @@ nav {
   overflow: hidden;
   position: relative;
   z-index: 1;
+  user-select: none;
 }
 .endorsements-heading {
   font-family: 'Orbitron', var(--sans);
@@ -712,12 +713,16 @@ nav {
   0% { transform: translateX(0); }
   100% { transform: translateX(-33.333%); }
 }
+@keyframes scrollEndorsementsReverse {
+  0% { transform: translateX(-33.333%); }
+  100% { transform: translateX(0); }
+}
 .endorsement-track { transition: opacity 0.4s ease; }
 .anti-endorsement-track {
   display: flex;
   gap: 24px;
   width: max-content;
-  animation: scrollEndorsements 120s linear infinite;
+  animation: scrollEndorsementsReverse 120s linear infinite;
   transition: opacity 0.4s ease;
 }
 .endorsements.anti .endorsement-track { display: none; }
