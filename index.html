@@ -381,6 +381,7 @@ nav {
   overflow: hidden;
   position: relative;
   z-index: 1;
+  user-select: none;
 }
 .logo-track {
   display: flex;
@@ -2814,7 +2815,7 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
   // Grab-and-fling state
   let dragGroup = null;
   let dragHistory = []; // recent mouse positions for velocity calc
-  const GRAB_RADIUS = 60; // px to detect a grab
+  const GRAB_RADIUS = 140; // 280px diameter grab area
 
   function updateMouseFromClient() {
     if (mouseClient.x < -5000) return;
