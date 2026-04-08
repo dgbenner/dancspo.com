@@ -2959,12 +2959,17 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
           dot.vy += (gdx / gdist) * groupRot * gdist;
         }
 
-        // If this group is being dragged, primary chases cursor with strong pull (not snap)
+        // If this group is being dragged, primary sticks to cursor (max 60px play)
         if (dragGroup === g && isPrimary) {
           var dragDx = mouse.x - dot.x;
           var dragDy = mouse.y - dot.y;
-          dot.vx = dragDx * 0.4;
-          dot.vy = dragDy * 0.4;
+          var dragDist = Math.sqrt(dragDx * dragDx + dragDy * dragDy);
+          if (dragDist > 60) {
+            dot.x = mouse.x - (dragDx / dragDist) * 60;
+            dot.y = mouse.y - (dragDy / dragDist) * 60;
+          }
+          dot.vx = dragDx * 0.8;
+          dot.vy = dragDy * 0.8;
         }
 
         // Seek mouse (suppressed while flung or dragged)
@@ -3122,8 +3127,10 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
 
     // Grab: mousedown near a group's primary dot
     window.addEventListener('mousedown', function(e) {
-      if (!mouse.x || mouse.x < -5000) return;
+      mouseClient.x = e.clientX;
+      mouseClient.y = e.clientY;
       updateMouseFromClient();
+      if (mouse.x < -5000) return;
       for (var i = 0; i < groups.length; i++) {
         var primary = groups[i].dots[0];
         var dx = mouse.x - primary.x;
@@ -3132,6 +3139,7 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
           dragGroup = groups[i];
           dragHistory = [{ x: mouse.x, y: mouse.y, t: performance.now() }];
           canvas.classList.add('grabbing');
+          e.preventDefault();
           break;
         }
       }
@@ -3146,8 +3154,8 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
         var first = dragHistory[0];
         var dt = (last.t - first.t) / 1000; // seconds
         if (dt > 0.01) {
-          var vx = (last.x - first.x) / dt * 0.02;
-          var vy = (last.y - first.y) / dt * 0.02;
+          var vx = (last.x - first.x) / dt * 0.06;
+          var vy = (last.y - first.y) / dt * 0.06;
           // Apply velocity to all dots in the group
           for (var d = 0; d < dragGroup.dots.length; d++) {
             dragGroup.dots[d].vx += vx;
