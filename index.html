@@ -2987,9 +2987,17 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
 
         // Grays spring toward primary — tight while dragged/flung, loose when normal
         if (!isPrimary) {
-          const rdx = dot.x - primary.x;
-          const rdy = dot.y - primary.y;
-          const rdist = Math.sqrt(rdx * rdx + rdy * rdy);
+          var rdx = dot.x - primary.x;
+          var rdy = dot.y - primary.y;
+          var rdist = Math.sqrt(rdx * rdx + rdy * rdy);
+          // Hard clamp: grays can never be more than 40px from primary during drag
+          if (dragGroup === g && rdist > 40) {
+            dot.x = primary.x + (rdx / rdist) * 40;
+            dot.y = primary.y + (rdy / rdist) * 40;
+            rdx = dot.x - primary.x;
+            rdy = dot.y - primary.y;
+            rdist = 40;
+          }
           // Blend between tight (0) and normal (1) based on flingFade
           const looseness = dragGroup === g ? 0 : flingFade;
           // Interpolate spring parameters
@@ -3030,14 +3038,15 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
             const sdy = dot.y - other.y;
             const sdist = Math.sqrt(sdx * sdx + sdy * sdy);
             const bothGray = o !== 0;
-            const range = bothGray ? 32 : 16;
+            const flingBoost = g.flung > 0 ? 3 : 1;
+            const range = (bothGray ? 32 : 16) * flingBoost;
             if (sdist > 0.1 && sdist < range) {
-              const push = (range - sdist) / range * (bothGray ? 0.5 : 0.25);
+              const push = (range - sdist) / range * (bothGray ? 0.5 : 0.25) * flingBoost;
               dot.vx += (sdx / sdist) * push;
               dot.vy += (sdy / sdist) * push;
-              // Tangential spin when grays collide
+              // Tangential spin when grays collide (amplified during fling)
               if (bothGray) {
-                const spin = (range - sdist) / range * 0.18;
+                const spin = (range - sdist) / range * 0.18 * flingBoost;
                 dot.vx += (-sdy / sdist) * spin;
                 dot.vy += (sdx / sdist) * spin;
               }
@@ -3055,8 +3064,8 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
         dot.vx *= damp;
         dot.vy *= damp;
 
-        // Clamp max speed (allow higher when flung)
-        const flingMaxMult = g.flung > 0 ? 15 : 1;
+        // Clamp max speed (uncapped when freshly flung, gradually clamps back)
+        const flingMaxMult = g.flung > 2500 ? 999 : g.flung > 0 ? 50 : 1;
         const sp = Math.sqrt(dot.vx * dot.vx + dot.vy * dot.vy);
         if (sp > cfg.maxSpeed * flingMaxMult) {
           dot.vx = (dot.vx / sp) * cfg.maxSpeed * flingMaxMult;
@@ -3154,12 +3163,29 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
         var first = dragHistory[0];
         var dt = (last.t - first.t) / 1000; // seconds
         if (dt > 0.01) {
-          var vx = (last.x - first.x) / dt * 0.06;
-          var vy = (last.y - first.y) / dt * 0.06;
-          // Apply velocity to all dots in the group
-          for (var d = 0; d < dragGroup.dots.length; d++) {
-            dragGroup.dots[d].vx += vx;
-            dragGroup.dots[d].vy += vy;
+          var vx = (last.x - first.x) / dt * 0.03;
+          var vy = (last.y - first.y) / dt * 0.03;
+          // Primary gets full fling velocity
+          dragGroup.dots[0].vx += vx;
+          dragGroup.dots[0].vy += vy;
+          // Grays: full fling velocity + small snap toward primary + scatter
+          var pri = dragGroup.dots[0];
+          for (var d = 1; d < dragGroup.dots.length; d++) {
+            var gd = dragGroup.dots[d];
+            // Full fling in the throw direction
+            gd.vx += vx;
+            gd.vy += vy;
+            // Light snap toward primary (doesn't fight the throw)
+            var snapDx = pri.x - gd.x;
+            var snapDy = pri.y - gd.y;
+            var snapDist = Math.sqrt(snapDx * snapDx + snapDy * snapDy);
+            if (snapDist > 0.1) {
+              gd.vx += (snapDx / snapDist) * 2;
+              gd.vy += (snapDy / snapDist) * 2;
+            }
+            // Small scatter for variety
+            gd.vx += (Math.random() - 0.5) * 1.5;
+            gd.vy += (Math.random() - 0.5) * 1.5;
           }
           dragGroup.flung = 3000; // ~50 seconds of gradual flung decay
         }
