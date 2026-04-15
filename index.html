@@ -2941,6 +2941,60 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     ctx.clearRect(0, 0, w, h);
     const hasMouse = canInteract && mouse.x > -5000;
 
+    // Group-to-group bounding-circle collisions
+    for (let i = 0; i < groups.length; i++) {
+      const g = groups[i];
+      let cx = 0, cy = 0;
+      for (let d = 0; d < 3; d++) { cx += g.dots[d].x; cy += g.dots[d].y; }
+      cx /= 3; cy /= 3;
+      let r = 0;
+      for (let d = 0; d < 3; d++) {
+        const ex = g.dots[d].x - cx, ey = g.dots[d].y - cy;
+        const dd = Math.sqrt(ex * ex + ey * ey) + (d === 0 ? 6 : 4);
+        if (dd > r) r = dd;
+      }
+      g._cx = cx; g._cy = cy; g._r = r + 8;
+    }
+    for (let i = 0; i < groups.length; i++) {
+      for (let j = i + 1; j < groups.length; j++) {
+        const gA = groups[i], gB = groups[j];
+        const dx = gB._cx - gA._cx;
+        const dy = gB._cy - gA._cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const sumR = gA._r + gB._r;
+        if (dist < 0.1 || dist >= sumR) continue;
+        const nx = dx / dist, ny = dy / dist;
+        const overlap = sumR - dist;
+        const bounce = (gA.flung > 0 || gB.flung > 0) ? 0.85 : 0.5;
+        const aLocked = dragGroup === gA;
+        const bLocked = dragGroup === gB;
+        const aShare = bLocked ? 1 : (aLocked ? 0 : 0.5);
+        const bShare = aLocked ? 1 : (bLocked ? 0 : 0.5);
+        for (let d = 0; d < 3; d++) {
+          gA.dots[d].x -= nx * overlap * aShare;
+          gA.dots[d].y -= ny * overlap * aShare;
+          gB.dots[d].x += nx * overlap * bShare;
+          gB.dots[d].y += ny * overlap * bShare;
+          if (!aLocked) {
+            const vnA = gA.dots[d].vx * nx + gA.dots[d].vy * ny;
+            if (vnA > 0) {
+              gA.dots[d].vx -= (1 + bounce) * vnA * nx;
+              gA.dots[d].vy -= (1 + bounce) * vnA * ny;
+            }
+          }
+          if (!bLocked) {
+            const vnB = gB.dots[d].vx * nx + gB.dots[d].vy * ny;
+            if (vnB < 0) {
+              gB.dots[d].vx -= (1 + bounce) * vnB * nx;
+              gB.dots[d].vy -= (1 + bounce) * vnB * ny;
+            }
+          }
+        }
+        if (gA.flung > 500 && gB.flung <= 0 && !bLocked) gB.flung = 1500;
+        if (gB.flung > 500 && gA.flung <= 0 && !aLocked) gA.flung = 1500;
+      }
+    }
+
     for (let i = 0; i < groups.length; i++) {
       const g = groups[i];
       const cfg = g.cfg;
