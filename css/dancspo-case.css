@@ -1,0 +1,277 @@
+/* ============================================================
+   dancspo-case.css
+   Shared dark theme for the case-study subpages. Loads AFTER
+   Bootstrap + main.css and overrides them to match
+   dancspo.com's look & hierarchy.
+   ============================================================ */
+
+:root {
+  --bg: #1a1a1a;
+  --cream: #ede6d8;
+  --white: #f5f5f0;
+  --red: #ff5544;
+  --red-deep: #a41608;
+  --surface: #242424;
+  --surface-2: #2e2e2e;
+  --serif: 'DM Serif Display', serif;
+  --display: 'Libre Caslon Display', 'DM Serif Display', serif;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --cap: 'Orbitron', 'IBM Plex Sans', sans-serif;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --border: rgba(232, 224, 208, 0.3);
+}
+
+/* ---------- Base ---------- */
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans) !important;
+  background-color: var(--bg) !important;
+  color: var(--cream);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Background grain, matching index.html */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+body > section,
+body > .custom-container { position: relative; z-index: 1; }
+
+/* Top breathing room (no fixed nav on these minimal pages) */
+body > section:first-of-type,
+section.pt-5, section.pt-4 { padding-top: 32px !important; }
+.custom-container.mt-5 { margin-top: 0 !important; }
+
+/* ---------- Typography ---------- */
+/* Display serif (kept available for any h1 usage) */
+h1 {
+  font-family: var(--display) !important;
+  font-weight: 400 !important;
+  color: var(--white) !important;
+  letter-spacing: -0.5px !important;
+  line-height: 1.12;
+  font-size: clamp(38px, 5vw, 60px) !important;
+}
+/* Client name — cap-style title face (Orbitron), matching dancspo titles */
+h2 {
+  font-family: var(--cap) !important;
+  font-weight: 700 !important;
+  color: var(--white) !important;
+  text-transform: uppercase;
+  letter-spacing: 1px !important;
+  line-height: 1.08;
+  font-size: 28px !important;
+  margin-top: 68px;
+}
+
+/* Product / sub-title line */
+h3 {
+  font-family: var(--cap) !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  text-transform: uppercase;
+  letter-spacing: 2px !important;
+  color: var(--cream) !important;
+  opacity: 0.85;
+}
+
+/* Section labels: Outcomes / Objective / Goals / My Role */
+h4 {
+  font-family: var(--cap) !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 2px !important;
+  color: var(--red) !important;
+  margin-top: 28px;
+  margin-bottom: 10px;
+}
+
+/* Body copy */
+h5, h6 {
+  font-family: var(--sans) !important;
+  font-weight: 300 !important;
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+  color: var(--cream) !important;
+}
+p { color: var(--cream); }
+strong, b { color: var(--white); font-weight: 600; }
+
+.intro-eyebrow { color: var(--red) !important; font-family: var(--cap) !important; }
+.standalone-note { color: rgba(237, 230, 216, 0.5) !important; }
+
+/* ---------- Links ---------- */
+a { color: var(--cream); }
+.artifacts-text { color: var(--red) !important; transition: color 0.2s; }
+.artifacts-text:hover { color: var(--white) !important; text-decoration: underline; }
+
+/* ---------- Case-study card ---------- */
+.case_study_container,
+.row.case_study_container {
+  background: var(--surface) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 32px !important;
+  margin: 0 auto;
+}
+.box-shadow {
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* ---------- Images: cream stroke + radius ---------- */
+.corner_img,
+.case_study_container img {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.2s, transform 0.2s;
+}
+a.artifacts-text:hover .corner_img { border-color: var(--red); }
+
+/* ---------- Outcomes block ---------- */
+.outcomes-container {
+  background: var(--surface-2) !important;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--red);
+  border-radius: var(--radius) !important;
+}
+.outcomes-list li { color: var(--cream); }
+
+/* ---------- Tech badges / pills ---------- */
+.tech-badges .badge,
+.tech-badges span {
+  background: rgba(0,0,0,0.4) !important;
+  border: 1px solid var(--border);
+  color: var(--cream) !important;
+}
+
+/* ---------- Collapse toggle buttons ---------- */
+.btn-case-study,
+.btn-card {
+  background: rgba(0,0,0,0.25) !important;
+  border: 1px solid var(--cream) !important;
+  color: var(--white) !important;
+  border-radius: var(--radius-sm) !important;
+  font-family: var(--sans) !important;
+  letter-spacing: 0.5px;
+  transition: background 0.2s, color 0.2s !important;
+}
+.btn-case-study:hover,
+.btn-card:hover {
+  background: var(--cream) !important;
+  color: var(--bg) !important;
+}
+.btn-arrow { filter: none; }
+
+/* ============================================================
+   NAV  (ported from index.html)
+   ============================================================ */
+nav.dcspo {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--bg);
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 1px 16px rgba(255, 255, 255, 0.02);
+}
+.dcspo .nav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.dcspo .nav-logo { text-decoration: none; display: flex; flex-direction: column; line-height: 1.2; }
+.dcspo .nav-logo-domain { font-family: var(--sans); font-size: 18px; color: var(--red); letter-spacing: 0.5px; }
+.dcspo .logo-dot { color: #D4A832; font-weight: 700; font-size: 24px; margin: 0 -1px; }
+.dcspo .nav-logo-name {
+  font-family: var(--sans); font-size: 11px; font-weight: 500; color: var(--cream);
+  text-transform: uppercase; letter-spacing: 5px; opacity: 0.7;
+}
+.dcspo .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; margin: 0; padding: 0; }
+.dcspo .nav-links a {
+  font-family: var(--cap); font-size: 11px; font-weight: 500; color: var(--cream);
+  text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; position: relative; transition: color 0.2s;
+}
+.dcspo .nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--red); transition: width 0.2s;
+}
+.dcspo .nav-links a:hover { color: var(--white); }
+.dcspo .nav-links a:hover::after { width: 100%; }
+.dcspo .nav-dropdown { position: relative; }
+.dcspo .nav-dropdown-menu {
+  position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%);
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 8px 0; min-width: 220px; opacity: 0; visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s; box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+.dcspo .nav-dropdown:hover .nav-dropdown-menu,
+.dcspo .nav-dropdown-menu:hover { opacity: 1; visibility: visible; }
+.dcspo .nav-dropdown-menu a {
+  display: block; padding: 8px 20px; font-size: 13px; text-transform: none;
+  letter-spacing: 0.5px; color: var(--cream); white-space: nowrap;
+}
+.dcspo .nav-dropdown-menu a::after { display: none; }
+.dcspo .nav-dropdown-menu a:hover { background: var(--surface-2); color: var(--white); }
+.dcspo .nav-hamburger {
+  display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none;
+}
+.dcspo .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--cream); transition: transform 0.3s, opacity 0.3s; }
+.dcspo .nav-hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.dcspo .nav-hamburger.active span:nth-child(2) { opacity: 0; }
+.dcspo .nav-hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-mobile {
+  display: none; position: fixed; top: 60px; left: 0; right: 0; bottom: 0;
+  background: var(--bg); z-index: 99; padding: 32px 24px; flex-direction: column; gap: 24px;
+}
+.nav-mobile.open { display: flex; }
+.nav-mobile a {
+  font-family: var(--cap); font-size: 14px; font-weight: 500; color: var(--cream);
+  text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; padding: 8px 0; border-bottom: 1px solid var(--border);
+}
+.nav-mobile a:hover { color: var(--red); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer.dcspo {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 48px 0 56px;
+  margin-top: 64px;
+  position: relative;
+  z-index: 1;
+}
+.dcspo .footer-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+  display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between;
+}
+.dcspo .footer-name { font-family: var(--display); font-size: 22px; color: var(--white); }
+.dcspo .footer-role {
+  font-family: var(--cap); font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--cream); opacity: 0.7; margin-top: 4px;
+}
+.dcspo .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+.dcspo .footer-links a {
+  font-family: var(--cap); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--cream); text-decoration: none; transition: color 0.2s;
+}
+.dcspo .footer-links a:hover { color: var(--red); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 860px) {
+  .dcspo .nav-links { display: none; }
+  .dcspo .nav-hamburger { display: flex; }
+}
