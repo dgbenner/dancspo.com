@@ -939,7 +939,7 @@ nav {
 }
 .about-seals {
   display: grid;
-  grid-template-columns: repeat(3, 150px);
+  grid-template-columns: repeat(2, 150px); /* temp: 4 seals = 2+2. Restore to repeat(3, 150px) when St. Thomas seal is re-enabled */
   gap: 10px;
   margin-top: 36px;
   justify-content: start;
@@ -1882,7 +1882,9 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
           St. Paul, Minnesota (Central Time)
         </div>
         <div class="about-seals">
+          <!-- HIDDEN until link is ready — to restore: uncomment below AND set .about-seals grid-template-columns back to repeat(3, 150px)
           <div class="seal-box"><span class="seal-img"><img src="images/seal-stthomas-mba.jpg" alt="University of St. Thomas Mini MBA"></span><span class="seal-caption">University of St. Thomas Mini MBA</span></div>
+          -->
           <div class="seal-box"><a href="https://bcert.me/bc/html/show-badge.html?b=jttbpsao" target="_blank" rel="noopener" title="Scrum Alliance Certified Product Owner"><span class="seal-img"><img src="images/seal-cspo.png" alt="Scrum Alliance Certified Scrum Product Owner (CSPO) certification badge"></span><span class="seal-caption">Scrum Alliance Certified Scrum Product Owner</span></a></div>
           <div class="seal-box"><a href="https://bcert.me/bc/html/show-badge.html?b=qoxpnkmy" target="_blank" rel="noopener" title="Scrum Alliance Certified Scrum Master"><span class="seal-img"><img src="images/seal-csm.png" alt="Scrum Alliance Certified ScrumMaster (CSM) certification badge"></span><span class="seal-caption">Scrum Alliance Certified ScrumMaster</span></a></div>
           <div class="seal-box"><a href="https://drive.google.com/file/d/124QPFP4WYxmq6Ms5wgLIGnJe5XrCMZaI/view?usp=sharing" target="_blank" rel="noopener" title="PMI PMP Training"><span class="seal-img"><img src="images/seal-pmp-300.png" alt="Project Management Institute (PMI) PMP training" style="max-height:123px"></span><span class="seal-caption">Project Management Institute PMP Trained</span></a></div>
