@@ -938,10 +938,11 @@ nav {
   opacity: 0.8;
 }
 .about-seals {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 150px);
   gap: 10px;
   margin-top: 36px;
-  flex-wrap: wrap;
+  justify-content: start;
 }
 .seal-pair {
   display: inline-flex;
@@ -1006,6 +1007,7 @@ nav {
   .project-grid { grid-template-columns: 1fr; }
   .project-meta-grid { grid-template-columns: 1fr; }
   .about-grid { grid-template-columns: 1fr; }
+  .about-seals { grid-template-columns: repeat(2, 150px); }
   .about-label {
     position: relative;
     top: auto;
@@ -1880,14 +1882,11 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
           St. Paul, Minnesota (Central Time)
         </div>
         <div class="about-seals">
-          <div class="seal-pair">
-            <div class="seal-box"><a href="https://bcert.me/bc/html/show-badge.html?b=jttbpsao" target="_blank" rel="noopener" title="Scrum Alliance Certified Product Owner"><span class="seal-img"><img src="images/seal-cspo.png" alt="Scrum Alliance Certified Scrum Product Owner (CSPO) certification badge"></span><span class="seal-caption">Scrum Alliance Certified Scrum Product Owner</span></a></div>
-            <div class="seal-box"><a href="https://bcert.me/bc/html/show-badge.html?b=qoxpnkmy" target="_blank" rel="noopener" title="Scrum Alliance Certified Scrum Master"><span class="seal-img"><img src="images/seal-csm.png" alt="Scrum Alliance Certified ScrumMaster (CSM) certification badge"></span><span class="seal-caption">Scrum Alliance Certified ScrumMaster</span></a></div>
-          </div>
-          <div class="seal-pair">
-            <div class="seal-box"><a href="https://drive.google.com/file/d/124QPFP4WYxmq6Ms5wgLIGnJe5XrCMZaI/view?usp=sharing" target="_blank" rel="noopener" title="PMI PMP Training"><span class="seal-img"><img src="images/seal-pmp-300.png" alt="Project Management Institute (PMI) PMP training" style="max-height:123px"></span><span class="seal-caption">Project Management Institute PMP Trained</span></a></div>
-            <div class="seal-box"><a href="https://drive.google.com/file/d/12oYYyPOWrtv8fO9ufugPcZNyhaYdA6fT/view?usp=sharing" target="_blank" rel="noopener" title="Nielsen Norman Group Master Certification"><span class="seal-img"><img src="images/seal-nng.png" alt="Nielsen Norman Group Master Certification in UX — Interaction Design, User Behavior Research, and UX Management &amp; Strategy" style="max-height:123px"></span><span class="seal-caption">Nielsen Norman Group Master Certification</span></a></div>
-          </div>
+          <div class="seal-box"><span class="seal-img"><img src="images/seal-stthomas-mba.jpg" alt="University of St. Thomas Mini MBA"></span><span class="seal-caption">University of St. Thomas Mini MBA</span></div>
+          <div class="seal-box"><a href="https://bcert.me/bc/html/show-badge.html?b=jttbpsao" target="_blank" rel="noopener" title="Scrum Alliance Certified Product Owner"><span class="seal-img"><img src="images/seal-cspo.png" alt="Scrum Alliance Certified Scrum Product Owner (CSPO) certification badge"></span><span class="seal-caption">Scrum Alliance Certified Scrum Product Owner</span></a></div>
+          <div class="seal-box"><a href="https://bcert.me/bc/html/show-badge.html?b=qoxpnkmy" target="_blank" rel="noopener" title="Scrum Alliance Certified Scrum Master"><span class="seal-img"><img src="images/seal-csm.png" alt="Scrum Alliance Certified ScrumMaster (CSM) certification badge"></span><span class="seal-caption">Scrum Alliance Certified ScrumMaster</span></a></div>
+          <div class="seal-box"><a href="https://drive.google.com/file/d/124QPFP4WYxmq6Ms5wgLIGnJe5XrCMZaI/view?usp=sharing" target="_blank" rel="noopener" title="PMI PMP Training"><span class="seal-img"><img src="images/seal-pmp-300.png" alt="Project Management Institute (PMI) PMP training" style="max-height:123px"></span><span class="seal-caption">Project Management Institute PMP Trained</span></a></div>
+          <div class="seal-box"><a href="https://drive.google.com/file/d/12oYYyPOWrtv8fO9ufugPcZNyhaYdA6fT/view?usp=sharing" target="_blank" rel="noopener" title="Nielsen Norman Group Master Certification"><span class="seal-img"><img src="images/seal-nng.png" alt="Nielsen Norman Group Master Certification in UX — Interaction Design, User Behavior Research, and UX Management &amp; Strategy" style="max-height:123px"></span><span class="seal-caption">Nielsen Norman Group Master Certification</span></a></div>
         </div>
       </div>
     </div>
